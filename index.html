@@ -5,102 +5,405 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BACI — Business Acquisition &amp; Conversion Intelligence</title>
 <style>
-  :root { --gold:#C1922F; --gold-bright:#E6B84A; }
-  * { box-sizing:border-box; }
-  html,body { margin:0; background:#000; color:#EDE6D6;
-    font-family:"Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+  :root{--gold:#C1922F;--gold-bright:#E6B84A;--ink:#EDE6D6}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#000;color:var(--ink);font-family:"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  .section{width:100%;background:#000;display:flex;justify-content:center}
+  .section .stage{position:relative;width:100%}
+  .section .stage>img{display:block;width:100%;height:auto}
 
-  /* Hero stage: the exact tile, scaling at any width; hotspots track it via % */
-  .hero { width:100%; background:#000; display:flex; justify-content:center; }
-  .stage { position:relative; width:100%; max-width:1400px; }
-  .stage img { display:block; width:100%; height:auto; }
+  /* Interactive hotspots */
+  .hot{position:absolute;z-index:3;border:1px solid transparent;border-radius:6px;cursor:pointer;background:transparent;display:block;text-indent:-9999px;overflow:hidden;transition:box-shadow .3s,border-color .3s}
+  .hot:hover,.hot:focus-visible{border-color:rgba(193,146,47,.75);box-shadow:0 0 18px rgba(193,146,47,.4),inset 0 0 12px rgba(193,146,47,.15);outline:none}
+  .pulse{animation:cardGlow 4.5s ease-in-out infinite}
+  @keyframes cardGlow{0%,100%{box-shadow:0 0 0 rgba(193,146,47,0)}50%{box-shadow:0 0 20px rgba(193,146,47,.16)}}
 
-  /* Interactive overlay — invisible until hover/focus, positioned over baked elements */
-  .hot { position:absolute; border:1px solid transparent; border-radius:6px;
-    cursor:pointer; background:transparent; transition:.25s ease;
-    display:block; text-indent:-9999px; overflow:hidden; }
-  .hot:hover, .hot:focus-visible {
-    border-color:rgba(193,146,47,.7);
-    box-shadow:0 0 18px rgba(193,146,47,.35), inset 0 0 12px rgba(193,146,47,.15);
-    outline:none; }
+  /* Hero */
+  .hero{width:100%;background:#000;display:flex;justify-content:center}
+  .hero .stage{position:relative;width:100%;max-width:1536px}
+  .hero .stage>img{display:block;width:100%;height:auto}
+  #fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+  .h-logo{left:2.4%;top:2.4%;width:13%;height:6%}.h-disc{left:39.2%;top:3.8%;width:7.4%;height:4.6%}
+  .h-modes{left:51.3%;top:3.8%;width:5.2%;height:4.6%}.h-sol{left:60.2%;top:3.8%;width:7.8%;height:4.6%}
+  .h-ins{left:72.8%;top:3.8%;width:6.2%;height:4.6%}.h-search{left:80.8%;top:3.2%;width:18.2%;height:5.8%;border-radius:4px}
+  .h-film{left:16.8%;top:67%;width:5.4%;height:8%;border-radius:50%}
+  .h-film::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--gold);animation:ring 2.6s ease-out infinite}
+  @keyframes ring{0%{transform:scale(.8);opacity:.6}70%{transform:scale(1.4);opacity:0}100%{opacity:0}}
+  .card{position:absolute;z-index:3;border-radius:8px;cursor:pointer;text-indent:-9999px;overflow:hidden;border:1px solid transparent;animation:cardGlow 4.5s ease-in-out infinite}
+  .card:hover{border-color:rgba(193,146,47,.6);box-shadow:0 0 30px rgba(193,146,47,.35)!important}
+  .c1{left:37%;top:14.4%;width:13.2%;height:14.8%}.c2{left:81%;top:14.6%;width:16%;height:11%;animation-delay:.6s}
+  .c3{left:66%;top:26%;width:12.8%;height:12%;animation-delay:1.2s}.c4{left:87.5%;top:32.7%;width:10%;height:13.4%;animation-delay:1.8s}
+  .c5{left:85.8%;top:50.8%;width:12.6%;height:13.9%;animation-delay:2.4s}.c6{left:37%;top:57.8%;width:13.7%;height:11.7%;animation-delay:3s}
+  .c7{left:52%;top:65%;width:15.1%;height:10.4%;animation-delay:3.6s}.c8{left:68.4%;top:64.5%;width:14.5%;height:10%;animation-delay:4.2s}
+  .counter{position:absolute;z-index:3;left:61%;top:15.4%;width:8%;height:3.1%;display:flex;align-items:center;color:var(--gold-bright);font-weight:600;letter-spacing:.02em;white-space:nowrap;pointer-events:none;font-size:clamp(9px,1.15vw,18px);background:radial-gradient(closest-side,#000 62%,rgba(0,0,0,0) 100%)}
 
-  /* Nav hotspots (%) */
-  .h-logo    { left:1.2%;  top:2.4%;  width:14%;  height:7%; }
-  .h-plat    { left:40.2%; top:4.2%;  width:7.2%; height:5%; }
-  .h-modes   { left:49.4%; top:4.2%;  width:5.4%; height:5%; }
-  .h-intel   { left:56.6%; top:4.2%;  width:9.6%; height:5%; }
-  .h-about   { left:68.2%; top:4.2%;  width:6%;   height:5%; }
-  .h-access  { left:76.2%; top:4.2%;  width:6.4%; height:5%; }
-  .h-request { left:82.4%; top:3.6%;  width:16%;  height:6%;  border-radius:4px; }
+  /* Text sections */
+  .textsec{width:100%;max-width:1200px;padding:64px 24px;text-align:center}
+  .eyebrow{color:var(--gold);letter-spacing:.35em;font-size:12px;text-transform:uppercase;margin-bottom:18px}
+  .stats{display:flex;flex-wrap:wrap;justify-content:center;gap:0;border:1px solid rgba(193,146,47,.25);border-radius:10px;overflow:hidden;margin:0 auto 34px}
+  .stat{flex:1 1 130px;padding:20px 14px;border-right:1px solid rgba(193,146,47,.15)}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;color:var(--gold-bright);font-size:26px;font-weight:600;font-family:Georgia,"Times New Roman",serif}
+  .stat span{display:block;color:#b9ad95;letter-spacing:.12em;font-size:10px;text-transform:uppercase;margin-top:6px}
+  .marquee{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(193,146,47,.2);border-bottom:1px solid rgba(193,146,47,.2);padding:16px 0}
+  .marquee div{display:inline-block;animation:scroll 32s linear infinite;color:var(--gold);letter-spacing:.28em;font-size:14px;text-transform:uppercase}
+  .marquee span{margin:0 26px;opacity:.85}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  /* Watch the film — pulsing ring over the baked play circle */
-  .h-film { left:14.8%; top:66.2%; width:6.2%; height:7.4%; border-radius:50%; }
-  .h-film::after { content:""; position:absolute; inset:-6px; border-radius:50%;
-    border:2px solid var(--gold); opacity:.0; animation:pulse 2.6s ease-out infinite; }
-  @keyframes pulse { 0%{transform:scale(.85);opacity:.55} 70%{transform:scale(1.35);opacity:0} 100%{opacity:0} }
+  /* Connect Your Business */
+  .connect{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:36px}
+  .ccard{border:1px solid rgba(193,146,47,.28);border-radius:12px;padding:26px 22px;text-align:left;background:linear-gradient(180deg,rgba(193,146,47,.05),rgba(0,0,0,0));transition:.3s}
+  .ccard:hover{border-color:var(--gold);box-shadow:0 0 26px rgba(193,146,47,.18)}
+  .ccard .cat{color:#b9ad95;letter-spacing:.18em;font-size:11px;text-transform:uppercase}
+  .ccard h3{color:var(--ink);font-weight:500;font-size:19px;margin:10px 0 20px;line-height:1.35}
+  .ccard a{display:inline-block;color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;padding:10px 20px;letter-spacing:.08em;font-size:12px;transition:.3s}
+  .ccard a:hover{background:rgba(193,146,47,.12)}
+  .headline{font-family:Georgia,"Times New Roman",serif;font-size:clamp(28px,5vw,52px);color:var(--ink);font-weight:400;line-height:1.1}
+  .headline .g{color:var(--gold-bright)}
+  .sub{color:#b9ad95;margin-top:16px;font-size:15px;line-height:1.6}
 
-  /* HUD card hover regions — subtle glow, no layout change to the tile */
-  .card { position:absolute; border-radius:8px; transition:.3s ease; pointer-events:none; }
-  .card.glow:hover { box-shadow:0 0 26px rgba(193,146,47,.28); }
+  /* Film */
+  .filmsec{padding:80px 24px;text-align:center;width:100%;max-width:1000px}
+  .playbtn{width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);background:transparent;color:var(--gold-bright);font-size:26px;cursor:pointer;position:relative;margin-top:24px}
+  .playbtn::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--gold);animation:ring 2.6s ease-out infinite}
 
-  /* Film modal */
-  .modal { position:fixed; inset:0; background:rgba(0,0,0,.9); display:none;
-    align-items:center; justify-content:center; z-index:50; }
-  .modal.open { display:flex; }
-  .film { width:min(90vw,960px); aspect-ratio:16/9; background:#0a0a0a;
-    border:1px solid rgba(193,146,47,.4); border-radius:10px; display:flex;
-    align-items:center; justify-content:center; color:var(--gold); letter-spacing:.15em;
-    font-size:14px; box-shadow:0 0 60px rgba(193,146,47,.15); }
-  .close { position:absolute; top:22px; right:26px; color:var(--gold); background:none;
-    border:1px solid rgba(193,146,47,.5); border-radius:4px; padding:8px 14px;
-    letter-spacing:.12em; cursor:pointer; font-size:12px; }
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal.open{display:flex}
+  .film{width:min(90vw,960px);aspect-ratio:16/9;background:#0a0a0a;border:1px solid rgba(193,146,47,.4);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);letter-spacing:.15em;font-size:14px;box-shadow:0 0 60px rgba(193,146,47,.15)}
+  .close{position:absolute;top:22px;right:26px;color:var(--gold);background:none;border:1px solid rgba(193,146,47,.5);border-radius:4px;padding:8px 14px;letter-spacing:.12em;cursor:pointer;font-size:12px}
 
-  /* Mobile: keep the exact tile, add a sticky Watch the Film CTA (hero invites) */
-  .mobile-cta { display:none; }
-  @media (max-width:760px){
-    .mobile-cta { display:flex; position:sticky; bottom:0; z-index:20;
-      justify-content:center; gap:10px; padding:14px; background:linear-gradient(#0000,#000 40%);
-      align-items:center; }
-    .mobile-cta button { background:transparent; color:var(--gold);
-      border:1px solid var(--gold); border-radius:40px; padding:12px 26px;
-      letter-spacing:.14em; font-size:13px; cursor:pointer; }
-  }
+  /* Introducing letter reveal (mask lifts off the baked letters one at a time) */
+  .reveal{position:absolute;overflow:hidden;z-index:4;pointer-events:none}
+  .reveal i{position:absolute;top:0;height:100%;background:#000;opacity:1;
+    -webkit-mask-image:linear-gradient(#0000,#000 14%,#000 86%,#0000);mask-image:linear-gradient(#0000,#000 14%,#000 86%,#0000)}
+  .reveal.go i{animation:rvl .55s ease forwards}
+  @keyframes rvl{to{opacity:0}}
+  /* Capabilities explorer */
+  .wheelwrap{position:relative;width:100%;max-width:1192px}
+  .wheelwrap>img{display:block;width:100%;height:auto}
+  .cap-hot{position:absolute;z-index:4;border:1px solid transparent;border-radius:50%;cursor:pointer;text-indent:-9999px;overflow:hidden;transition:border-color .25s,background .25s}
+  .cap-hot:hover,.cap-hot.active{border-color:rgba(230,184,74,.75)}
+  .veil{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;opacity:0;transition:opacity .5s ease}
+  .veil.on{opacity:1}
+  .panel{width:100%;max-width:980px;padding:22px 24px 64px}
+  .panel-inner{border:1px solid rgba(193,146,47,.28);border-radius:14px;padding:32px 30px;background:linear-gradient(180deg,rgba(193,146,47,.05),rgba(0,0,0,0))}
+  .panel h3{color:var(--gold-bright);font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(20px,3vw,30px);margin:0}
+  .divider{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:16px 0;width:0;transition:width .55s ease}
+  .panel.show .divider{width:72%}
+  .panel p{color:#c9bd9f;font-size:15px;line-height:1.65;margin:0}
+  #capFeatures{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+  #capFeatures li{color:#c9bd9f;font-size:14px;padding-left:18px;position:relative;line-height:1.5}
+  #capFeatures li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+  .cta{display:inline-block;margin-top:24px;color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;padding:11px 22px;letter-spacing:.08em;font-size:13px;transition:.3s}
+  .cta:hover{background:rgba(193,146,47,.12)}
+  .capbody{transition:opacity .28s ease,transform .28s ease}
+  .capbody.swap{opacity:0;transform:translateY(8px)}
+  @media(max-width:640px){#capFeatures{grid-template-columns:1fr}}
+  /* Sticky header (appears after hero) */
+  .siteheader{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 20px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(193,146,47,.18);transform:translateY(-105%);transition:transform .35s ease}
+  .siteheader.show{transform:translateY(0)}
+  .siteheader img{height:24px;width:auto;display:block}
+  .siteheader .req{color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;
+    padding:8px 16px;letter-spacing:.08em;font-size:12px;transition:.3s}
+  .siteheader .req:hover{background:rgba(193,146,47,.12)}
+  .tilelink{display:block;width:100%;position:relative;transition:box-shadow .3s}
+  .tilelink>img{display:block;width:100%;height:auto}
+  .tilelink:hover{box-shadow:inset 0 0 0 1px rgba(193,146,47,.4),0 0 30px rgba(193,146,47,.12)}
+  .fade{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+  .fade.in{opacity:1;transform:none}
+  .mobile-cta{display:none}
+  @media(max-width:760px){.mobile-cta{display:flex;position:sticky;bottom:0;z-index:20;justify-content:center;padding:14px;background:linear-gradient(#0000,#000 40%)}
+  .mobile-cta button{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:40px;padding:12px 26px;letter-spacing:.14em;font-size:13px;cursor:pointer}}
 </style>
 </head>
 <body>
-  <section class="hero" aria-label="BACI hero">
-    <div class="stage">
-      <img src="hero.webp"
-           alt="BACI — the future of growth is intelligence. Analysing millions of business signals in real time." />
 
-      <!-- Interactive layer over the exact tile -->
-      <a class="hot h-logo"    href="#top"          aria-label="BACI home">BACI</a>
-      <a class="hot h-plat"    href="#platform"     aria-label="Platform">Platform</a>
-      <a class="hot h-modes"   href="#modes"        aria-label="Modes">Modes</a>
-      <a class="hot h-intel"   href="#intelligence" aria-label="Intelligence">Intelligence</a>
-      <a class="hot h-about"   href="#about"        aria-label="About">About</a>
-      <a class="hot h-access"  href="#access"       aria-label="Access">Access</a>
-      <a class="hot h-request" href="#request"      aria-label="Request access">Request access</a>
-      <button class="hot h-film" id="filmBtn" aria-label="Watch the film">Watch the film</button>
+  <header class="siteheader" id="siteHeader">
+    <a href="#top" aria-label="BACI home"><img src="logo.webp" alt="BACI" /></a>
+    <a class="req" href="#connect">Request access</a>
+  </header>
+
+  <!-- S1 HERO -->
+  <section class="hero" id="top" aria-label="BACI hero">
+    <div class="stage" id="stage">
+      <img src="hero.webp" alt="BACI — the future of growth is intelligence." />
+      <canvas id="fx"></canvas>
+      <a class="hot h-logo" href="#top">BACI</a>
+      <a class="hot h-disc" href="#growth-broken">Discover</a>
+      <a class="hot h-modes" href="#modes">Modes</a>
+      <a class="hot h-sol" href="#capabilities">Solutions</a>
+      <a class="hot h-ins" href="#every-industry">Insights</a>
+      <a class="hot h-search" href="#every-industry">Search industries</a>
+      <button class="hot h-film" id="filmBtn">Watch the film</button>
+      <a class="card c1" href="#growth-broken">Business pattern</a>
+      <a class="card c2" href="#capabilities">Conversion probability</a>
+      <a class="card c3" href="#every-industry">Audience cluster</a>
+      <a class="card c4" href="#capabilities">Content optimisation</a>
+      <a class="card c5" href="#built-for-growth">Channel opportunity</a>
+      <a class="card c6" href="#every-industry">Market shift detected</a>
+      <a class="card c7" href="#modes">Intelligence engine</a>
+      <a class="card c8" href="#capabilities">Predictive outcome</a>
+      <div class="counter"><span id="sig">37,942,118</span></div>
     </div>
   </section>
 
-  <div class="mobile-cta"><button id="filmBtnMobile">Watch the film ▶</button></div>
+  <!-- S2 GLOBAL REGIONS CAROUSEL -->
+  <section class="section" id="regions" style="flex-direction:column;align-items:center">
+    <div class="textsec">
+      <div class="eyebrow">Global reach · Local precision</div>
+      <div class="stats">
+        <div class="stat"><b>150+</b><span>Countries</span></div>
+        <div class="stat"><b>70+</b><span>Languages</span></div>
+        <div class="stat"><b>9</b><span>Regions</span></div>
+        <div class="stat"><b>70+</b><span>Intelligence engines</span></div>
+        <div class="stat"><b>3</b><span>Operating modes</span></div>
+        <div class="stat"><b>24/7</b><span>Execution</span></div>
+        <div class="stat"><b>&#8734;</b><span>Infinite intelligence</span></div>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true"><div>
+      <span>Africa</span>&middot;<span>Asia</span>&middot;<span>Europe</span>&middot;<span>MENA</span>&middot;<span>North America</span>&middot;<span>Latin America</span>&middot;<span>Caribbean</span>&middot;<span>Oceania</span>&middot;<span>Europe &amp; MENA</span>&middot;
+      <span>Africa</span>&middot;<span>Asia</span>&middot;<span>Europe</span>&middot;<span>MENA</span>&middot;<span>North America</span>&middot;<span>Latin America</span>&middot;<span>Caribbean</span>&middot;<span>Oceania</span>&middot;<span>Europe &amp; MENA</span>&middot;
+    </div></div>
+    <div class="stage" style="max-width:1536px"><img src="global-reach.webp" loading="lazy" alt="Global reach — infinite intelligence" /></div>
+  </section>
+
+  <!-- S3 GROWTH IS BROKEN (with drowning-in-data + intelligence-lives as its visuals) -->
+  <section class="section" id="growth-broken" style="flex-direction:column;align-items:center">
+    <div class="stage" style="max-width:1122px"><img src="growth-broken.webp" loading="lazy" alt="The reality — growth is broken" /></div>
+    <div class="stage" style="max-width:1672px"><img src="drowning-data.webp" loading="lazy" alt="Businesses are drowning in data" /></div>
+    <div class="stage" style="max-width:1672px"><img src="intelligence-lives.webp" loading="lazy" alt="Intelligence lives in one system, execution in another, strategy somewhere else" /></div>
+    <a class="tilelink fade" href="#introducing" style="max-width:1536px" aria-label="Businesses aren't short of data, they're short of certainty"><img src="certainty.webp" loading="lazy" alt="Businesses aren't short of data. They're short of certainty." /></a>
+    <a class="tilelink fade" href="#introducing" style="max-width:1672px" aria-label="What if it didn't"><img src="whatif.webp" loading="lazy" alt="What if it didn't?" /></a>
+  </section>
+
+  <!-- S4 INTRODUCING BACI -->
+  <section class="section" id="introducing" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#doctrine" style="max-width:1536px" aria-label="The future of growth is intelligence"><img src="future-intelligence.webp" loading="lazy" alt="The future of growth is intelligence." /></a>
+    <div class="stage" style="max-width:1536px">
+      <img src="introducing.webp" loading="lazy" alt="Introducing BACI" />
+      <div class="reveal" id="rvIntro" style="left:28.6%;top:32%;width:42.4%;height:6.5%"></div>
+      <div class="reveal" id="rvBaci" style="left:23.4%;top:42.5%;width:53.6%;height:15%"></div>
+    </div>
+  </section>
+
+  <!-- S5 BACI DOCTRINE -->
+  <section class="section" id="doctrine">
+    <div class="stage" style="max-width:1024px">
+      <img src="doctrine.webp" loading="lazy" alt="The BACI doctrine — Acquire, Convert, Grow" />
+      <a class="hot pulse" style="left:29.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%" href="#capabilities">Acquire</a>
+      <a class="hot pulse" style="left:51.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%;animation-delay:1.2s" href="#capabilities">Convert</a>
+      <a class="hot pulse" style="left:40.3%;top:51.1%;width:18.6%;height:12.4%;border-radius:50%;animation-delay:2.4s" href="#capabilities">Grow</a>
+    </div>
+  </section>
+
+  <!-- S6 BUILT FOR GROWTH -->
+  <section class="section" id="built-for-growth">
+    <div class="stage" style="max-width:1536px">
+      <img src="industries.webp" loading="lazy" alt="Built for growth — every industry" />
+      <a class="hot" style="left:14%;top:4.9%;width:13%;height:6.8%" href="#every-industry">Retail</a>
+      <a class="hot" style="left:39.1%;top:4.4%;width:16%;height:7.8%" href="#every-industry">Professional services</a>
+      <a class="hot" style="left:64.8%;top:4.4%;width:14%;height:7.8%" href="#every-industry">Human resources</a>
+      <a class="hot" style="left:15.6%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Healthcare</a>
+      <a class="hot" style="left:36.6%;top:87.8%;width:16%;height:7.8%" href="#every-industry">Tendering and bidding</a>
+      <a class="hot" style="left:58.4%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Real estate</a>
+      <a class="hot" style="left:76.6%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Procurement</a>
+    </div>
+  </section>
+
+  <!-- S7 EVERY INDUSTRY IS DIFFERENT (Industry Intelligence Explorer) -->
+  <section class="section" id="every-industry">
+    <div class="stage" style="max-width:1344px">
+      <img src="industry-explorer.webp" loading="lazy" alt="Industry Intelligence Explorer — every industry is different" />
+      <!-- industry tabs (first-pass positions) -->
+      <a class="hot" style="left:3%;top:37%;width:8%;height:6%" href="#every-industry">Social media management</a>
+      <a class="hot" style="left:11%;top:37%;width:7%;height:6%" href="#every-industry">Skincare and beauty</a>
+      <a class="hot" style="left:17%;top:37%;width:7%;height:5%" href="#every-industry">Healthcare</a>
+      <a class="hot" style="left:24%;top:37%;width:7%;height:6%" href="#every-industry">Human resources</a>
+      <a class="hot" style="left:31%;top:37%;width:5%;height:5%" href="#every-industry">Retail</a>
+      <a class="hot" style="left:36%;top:37%;width:6.5%;height:5%" href="#every-industry">Real estate</a>
+      <a class="hot" style="left:43%;top:37%;width:6.5%;height:5%" href="#every-industry">Hospitality</a>
+      <a class="hot" style="left:50%;top:37%;width:4%;height:5%" href="#every-industry">Legal</a>
+      <a class="hot" style="left:54.5%;top:37%;width:6%;height:5%" href="#every-industry">Education</a>
+      <a class="hot" style="left:61%;top:37%;width:6.5%;height:5%" href="#every-industry">Technology</a>
+      <a class="hot" style="left:68%;top:37%;width:7%;height:5%" href="#every-industry">Construction</a>
+      <a class="hot" style="left:75.5%;top:37%;width:5%;height:5%" href="#every-industry">Finance</a>
+      <a class="hot" style="left:82%;top:35%;width:16%;height:6.5%" href="#every-industry">Explore any industry</a>
+    </div>
+  </section>
+
+  <!-- S8 CAPABILITIES — interactive explorer -->
+  <section class="section" id="capabilities" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#capabilities" style="max-width:1535px" aria-label="Because the future of growth is not more tools"><img src="not-more-tools.webp" loading="lazy" alt="Because the future of growth is not more tools." /></a>
+    <div class="wheelwrap">
+      <img src="capabilities-wheel.webp" loading="lazy" alt="BACI capabilities wheel" />
+      <svg class="veil" id="capVeil" viewBox="0 0 1192 855" aria-hidden="true">
+        <defs><mask id="capMask">
+          <rect width="1192" height="855" fill="#fff"/>
+          <circle cx="596" cy="430" r="238" fill="#000"/>
+          <circle id="selHole" cx="-200" cy="-200" r="98" fill="#000"/>
+        </mask></defs>
+        <rect width="1192" height="855" fill="#000" opacity="0.58" mask="url(#capMask)"/>
+      </svg>
+      <a class="cap-hot" data-cap="performance"  style="left:43.6%;top:1.1%;width:13.4%;height:12%">Performance</a>
+      <a class="cap-hot" data-cap="distribution" style="left:23.5%;top:4.9%;width:13.4%;height:12%">Distribution</a>
+      <a class="cap-hot" data-cap="conversion"   style="left:63.8%;top:4.9%;width:13.4%;height:12%">Conversion</a>
+      <a class="cap-hot" data-cap="creator"      style="left:12.6%;top:15.9%;width:13.4%;height:12%">Creator</a>
+      <a class="cap-hot" data-cap="acquisition"  style="left:74.2%;top:15.5%;width:13.4%;height:12%">Acquisition</a>
+      <a class="cap-hot" data-cap="affiliate"    style="left:10.5%;top:29.9%;width:13.4%;height:12%">Affiliate</a>
+      <a class="cap-hot" data-cap="campaign"     style="left:76.3%;top:29.9%;width:13.4%;height:12%">Campaign</a>
+      <a class="cap-hot" data-cap="audience"     style="left:17.2%;top:43.2%;width:13.4%;height:12%">Audience</a>
+      <a class="cap-hot" data-cap="content"      style="left:69.6%;top:43.2%;width:13.4%;height:12%">Content</a>
+      <a class="cap-hot" data-cap="behavioural"  style="left:31.9%;top:50%;width:13.4%;height:12%">Behavioural</a>
+      <a class="cap-hot" data-cap="investors"    style="left:54.5%;top:50.4%;width:13.4%;height:12%">Investors and funding</a>
+    </div>
+    <div class="panel" id="capPanel">
+      <div class="panel-inner">
+        <h3 id="capTitle">Explore the capabilities</h3>
+        <div class="divider"></div>
+        <div class="capbody">
+          <p id="capBody">Select any capability to see how BACI applies intelligence to it. Select it again to return to the overview.</p>
+          <ul id="capFeatures"></ul>
+        </div>
+        <a class="cta" id="capCTA" href="#connect" style="display:none">Explore</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9 MODES -->
+  <section class="section" id="modes" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#connect" style="max-width:1536px" aria-label="We provide the intelligence, you decide the path"><img src="decide-path.webp" loading="lazy" alt="We provide the intelligence. You decide the path." /></a>
+    <div class="stage" style="max-width:1402px">
+      <img src="modes.webp" loading="lazy" alt="Three modes — Manual, Hybrid, Autonomous" />
+      <a class="hot" style="left:14%;top:34%;width:14.5%;height:28%;border-radius:12px" href="#connect">Manual</a>
+      <a class="hot" style="left:42%;top:32%;width:15%;height:30%;border-radius:12px" href="#connect">Hybrid</a>
+      <a class="hot" style="left:70%;top:34%;width:22%;height:28%;border-radius:12px" href="#connect">Autonomous</a>
+    </div>
+  </section>
+
+  <!-- S10 FILM -->
+  <section class="section" id="film" style="flex-direction:column;align-items:center">
+    <div class="filmsec">
+      <div class="eyebrow">The film</div>
+      <div class="headline">See how the engine <span class="g">thinks.</span></div>
+      <button class="playbtn" id="filmBtn2" aria-label="Watch the film">&#9654;</button>
+    </div>
+  </section>
+
+  <!-- S11 CONNECT YOUR BUSINESS -->
+  <section class="section" id="connect" style="flex-direction:column;align-items:center">
+    <div class="textsec">
+      <div class="eyebrow">You're here · The next move is yours</div>
+      <div class="headline">Choose how you connect with <span class="g">BACI.</span></div>
+      <p class="sub">However you choose to engage, BACI provides the intelligence organisations, developers, affiliates, agencies, technology partners and independent professionals need to make better decisions.</p>
+      <div class="connect">
+        <div class="ccard"><div class="cat">Enterprise</div><h3>Enterprise intelligence built for leaders.</h3><a href="#request">Request enterprise access</a></div>
+        <div class="ccard"><div class="cat">Developers</div><h3>Access everything. Build anything.</h3><a href="#request">Developer portal</a></div>
+        <div class="ccard"><div class="cat">Agencies</div><h3>Deliver results your competitors can't explain.</h3><a href="#request">Become a BACI partner</a></div>
+        <div class="ccard"><div class="cat">Technology partners</div><h3>Integrate. Differentiate. Elevate.</h3><a href="#request">Partner with BACI</a></div>
+        <div class="ccard"><div class="cat">Independent professionals</div><h3>Build with intelligence. Grow with confidence.</h3><a href="#request">Start with BACI</a></div>
+      </div>
+      <div style="margin-top:56px" id="request">
+        <div class="headline">The intelligence is ready. <span class="g">Are you?</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="section" id="footer" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#top" style="max-width:1402px" aria-label="BACI — back to top"><img src="footer-brand.webp" loading="lazy" alt="BACI — your growth, our intelligence" /></a>
+  </footer>
+
+  <div class="mobile-cta"><button id="filmBtnMobile">Watch the film &#9654;</button></div>
 
   <div class="modal" id="filmModal" role="dialog" aria-modal="true" aria-label="BACI film">
-    <button class="close" id="filmClose">CLOSE ✕</button>
+    <button class="close" id="filmClose">CLOSE &#10005;</button>
     <div class="film">BACI FILM — add your video source here</div>
   </div>
 
   <script>
-    const modal = document.getElementById('filmModal');
-    const open = () => modal.classList.add('open');
-    const close = () => modal.classList.remove('open');
-    document.getElementById('filmBtn').addEventListener('click', open);
-    document.getElementById('filmBtnMobile').addEventListener('click', open);
-    document.getElementById('filmClose').addEventListener('click', close);
-    modal.addEventListener('click', e => { if (e.target === modal) close(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    var modal=document.getElementById('filmModal');
+    function openM(){modal.classList.add('open')} function closeM(){modal.classList.remove('open')}
+    ['filmBtn','filmBtn2','filmBtnMobile'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('click',openM)});
+    document.getElementById('filmClose').addEventListener('click',closeM);
+    modal.addEventListener('click',function(e){if(e.target===modal)closeM()});
+    addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
+    var n=37942118,sig=document.getElementById('sig');
+    setInterval(function(){n+=Math.floor(Math.random()*37)+3;sig.textContent=n.toLocaleString('en-US')},900);
+    var cv=document.getElementById('fx'),cx=cv.getContext('2d'),stage=document.getElementById('stage'),W,H,stars,rt=0;
+    function size(){var r=stage.getBoundingClientRect();W=cv.width=r.width;H=cv.height=r.height;
+      stars=Array.from({length:70},function(){return{x:(0.5+Math.random()*0.5)*W,y:Math.random()*H,r:Math.random()*1.4+0.3,p:Math.random()*6.28,s:Math.random()*0.04+0.01}})}
+    addEventListener('resize',size);size();
+    function frame(){cx.clearRect(0,0,W,H);
+      for(var i=0;i<stars.length;i++){var st=stars[i];st.p+=st.s;var a=(Math.sin(st.p)*0.5+0.5)*0.8;
+        cx.beginPath();cx.arc(st.x,st.y,st.r,0,6.28);cx.fillStyle='rgba(230,184,74,'+a.toFixed(3)+')';cx.fill()}
+      rt+=0.02;var o=0.35+Math.sin(rt)*0.2,rad=24+Math.sin(rt)*6;
+      cx.strokeStyle='rgba(230,184,74,'+o.toFixed(3)+')';cx.lineWidth=1.2;
+      cx.beginPath();cx.arc(W*0.685,H*0.515,rad,0,6.28);cx.stroke();requestAnimationFrame(frame)}
+    frame();
+    var fo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');fo.unobserve(e.target);}});},{threshold:.15});
+    document.querySelectorAll('.fade').forEach(function(el){fo.observe(el)});
+    (function(){
+      function build(el,count,step,start){ if(!el)return;
+        for(var k=0;k<count;k++){var b=document.createElement('i');
+          b.style.left=(k*100/count)+'%';b.style.width=(100/count)+'%';
+          b.style.animationDelay=(start+k*step)+'ms';el.appendChild(b);} }
+      var ri=document.getElementById('rvIntro'),rb=document.getElementById('rvBaci');
+      build(ri,11,70,0);      // INTRODUCING — 11 letters
+      build(rb,4,170,950);    // BACI — after Introducing finishes
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){
+        if(e.isIntersecting){ri.classList.add('go');rb.classList.add('go');io.disconnect();}});},{threshold:.5});
+      if(ri)io.observe(ri.closest('section'));
+    })();
+
+    // ---- Capabilities explorer ----
+    var CAP={
+      performance:{t:"Performance Intelligence",l:"The businesses that improve fastest are the ones that measure best.",f:["Track every outcome across every capability and channel.","Interpret performance signals and identify improvement opportunities.","Apply learnings to make the next campaign sharper.","Build a system that becomes sharper with every cycle."]},
+      distribution:{t:"Distribution Intelligence",l:"The right message at the wrong moment is wasted. BACI eliminates that.",f:["Identify the optimal channels for every message and audience.","Deploy at the moment your audience is most likely to act.","Execute across every channel with precision and intelligence.","Continuously refine distribution based on performance data."]},
+      conversion:{t:"Conversion Intelligence",l:"Attention is the beginning. Conversion is the objective.",f:["Understand every signal across the conversion journey.","Remove friction and strengthen intent at every touchpoint.","Move people from awareness to committed action.","Track every outcome and apply every learning to the next cycle."]},
+      creator:{t:"Creator & Influencer Intelligence",l:"Anyone can find an influencer. BACI finds the ones who convert.",f:["Identify creators and influencers aligned to your audience and objectives.","Assess reach, relevance, engagement quality and conversion potential.","Launch partnerships with intelligence-backed confidence.","Track performance and optimise every creator relationship."]},
+      acquisition:{t:"Acquisition Intelligence",l:"Most businesses pursue growth. BACI systematises it.",f:["Find the highest-value acquisition opportunities across every channel.","Create acquisition systems that generate consistent, qualified pipeline.","Continuously refine every channel for maximum return.","Expand acquisition systematically without increasing complexity."]},
+      affiliate:{t:"Affiliate Intelligence",l:"The most scalable businesses build ecosystems that create demand for them.",f:["Find affiliate partners with the highest probability of conversion.","Assess audience alignment, influence and revenue potential.","Launch coordinated affiliate programmes with precision.","Continuously improve reach, acquisition and revenue outcomes."]},
+      campaign:{t:"Campaign Intelligence",l:"Most campaigns are built on instinct. BACI builds them on intelligence.",f:["Build campaigns around intelligence, not assumption.","Execute across every channel with precision and timing.","Track performance signals in real time across every touchpoint.","Continuously improve targeting, messaging and conversion."]},
+      audience:{t:"Audience Intelligence",l:"Most businesses chase audiences. BACI finds them.",f:["Discover the right audiences across platforms, channels and markets.","Deep behavioural, demographic and intent insights that reveal what drives action.","Focus on the segments that deliver the highest value and strongest potential.","Build audience strategies that connect, engage and convert."]},
+      content:{t:"Content Intelligence",l:"The most effective businesses do not communicate more. They communicate better.",f:["Generate intelligence-led content aligned to every stage of the journey.","Continuously refine messaging based on audience response and performance.","Deploy content across the right channels at the right moment.","Track what resonates and apply every learning to the next cycle."]},
+      behavioural:{t:"Behavioural Intelligence",l:"Your competitors know who their audience is. Very few know why they buy.",f:["Identify the triggers and motivations that drive your audience to act.","Understand the decision journey from awareness to commitment.","Design campaigns built around psychology, not guesswork.","Continuously refine based on real behavioural outcomes."]},
+      investors:{t:"Investors & Funding Intelligence",l:"Raise capital with intelligence.",f:["Find the right investors and funders across markets, industries and funding stages.","Evaluate alignment, past investments, thesis fit and engagement readiness.","Launch personalised outreach campaigns that get responses.","Track performance, measure engagement and optimise outcomes."]}
+    };
+    var HOLE={performance:[599,94],distribution:[360,144],conversion:[840,144],creator:[230,289],acquisition:[964,284],affiliate:[205,474],campaign:[989,474],audience:[285,649],content:[909,649],behavioural:[460,739],investors:[729,745]};
+    (function(){
+      var hots=document.querySelectorAll('.cap-hot'),veil=document.getElementById('capVeil'),
+          sel=document.getElementById('selHole'),panel=document.getElementById('capPanel'),
+          title=document.getElementById('capTitle'),body=document.getElementById('capBody'),
+          feats=document.getElementById('capFeatures'),cta=document.getElementById('capCTA'),
+          bodyWrap=panel.querySelector('.capbody'),active=null;
+      function overview(){active=null;veil.classList.remove('on');panel.classList.remove('show');
+        hots.forEach(function(h){h.classList.remove('active')});
+        bodyWrap.classList.add('swap');
+        setTimeout(function(){title.textContent='Explore the capabilities';
+          body.textContent='Select any capability to see how BACI applies intelligence to it. Select it again to return to the overview.';
+          feats.innerHTML='';cta.style.display='none';bodyWrap.classList.remove('swap');},240);}
+      function select(id,el){
+        if(active===id){overview();return;}
+        active=id;var d=CAP[id],c=HOLE[id];
+        sel.setAttribute('cx',c[0]);sel.setAttribute('cy',c[1]);veil.classList.add('on');
+        hots.forEach(function(h){h.classList.toggle('active',h===el)});
+        panel.classList.add('show');bodyWrap.classList.add('swap');
+        setTimeout(function(){title.textContent=d.t;body.textContent=d.l;
+          feats.innerHTML=d.f.map(function(x){return '<li>'+x+'</li>'}).join('');
+          cta.textContent='Explore '+d.t;cta.style.display='inline-block';
+          bodyWrap.classList.remove('swap');},240);
+      }
+      hots.forEach(function(h){h.addEventListener('click',function(e){e.preventDefault();select(h.getAttribute('data-cap'),h)})});
+    })();
+
+    // Sticky header: reveal after the hero scrolls away
+    (function(){var hd=document.getElementById('siteHeader'),hero=document.getElementById('top');
+      function onScroll(){var t=hero.offsetHeight*0.7;if(window.scrollY>t)hd.classList.add('show');else hd.classList.remove('show');}
+      addEventListener('scroll',onScroll,{passive:true});onScroll();})();
   </script>
 </body>
 </html>
