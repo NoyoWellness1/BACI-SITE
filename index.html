@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BACI — Business Acquisition &amp; Conversion Intelligence</title>
 <style>
-  :root{--gold:#C1922F;--gold-bright:#E6B84A;--ink:#EDE6D6}
+  :root{--gold:#C1922F;--gold-bright:#E6B84A;--ink:#E9D6A8}
   *{box-sizing:border-box}
   html,body{margin:0;background:#000;color:var(--ink);font-family:"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
   a{text-decoration:none;color:inherit}
@@ -16,7 +16,6 @@
   /* Interactive hotspots */
   .hot{position:absolute;z-index:3;border:1px solid transparent;border-radius:6px;cursor:pointer;background:transparent;display:block;text-indent:-9999px;overflow:hidden;transition:box-shadow .3s,border-color .3s}
   .hot:hover,.hot:focus-visible{border-color:rgba(193,146,47,.75);box-shadow:0 0 18px rgba(193,146,47,.4),inset 0 0 12px rgba(193,146,47,.15);outline:none}
-  .pulse{animation:cardGlow 4.5s ease-in-out infinite}
   @keyframes cardGlow{0%,100%{box-shadow:0 0 0 rgba(193,146,47,0)}50%{box-shadow:0 0 20px rgba(193,146,47,.16)}}
 
   /* Hero */
@@ -39,22 +38,33 @@
   .counter{position:absolute;z-index:3;left:61%;top:15.4%;width:8%;height:3.1%;display:flex;align-items:center;color:var(--gold-bright);font-weight:600;letter-spacing:.02em;white-space:nowrap;pointer-events:none;font-size:clamp(9px,1.15vw,18px);background:radial-gradient(closest-side,#000 62%,rgba(0,0,0,0) 100%)}
 
   /* Text sections */
-  .textsec{width:100%;max-width:1200px;padding:64px 24px;text-align:center}
+  .textsec{width:100%;max-width:1120px;padding:104px 24px;text-align:center}
   .eyebrow{color:var(--gold);letter-spacing:.35em;font-size:12px;text-transform:uppercase;margin-bottom:18px}
-  .stats{display:flex;flex-wrap:wrap;justify-content:center;gap:0;border:1px solid rgba(193,146,47,.25);border-radius:10px;overflow:hidden;margin:0 auto 34px}
-  .stat{flex:1 1 130px;padding:20px 14px;border-right:1px solid rgba(193,146,47,.15)}
+  .stats{display:flex;justify-content:center;gap:0;margin:0 auto 34px}
+  .stat{flex:1 1 130px;padding:20px 14px}
   .stat:last-child{border-right:none}
   .stat b{display:block;color:var(--gold-bright);font-size:26px;font-weight:600;font-family:Georgia,"Times New Roman",serif}
   .stat span{display:block;color:#b9ad95;letter-spacing:.12em;font-size:10px;text-transform:uppercase;margin-top:6px}
-  .marquee{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(193,146,47,.2);border-bottom:1px solid rgba(193,146,47,.2);padding:16px 0}
-  .marquee div{display:inline-block;animation:scroll 32s linear infinite;color:var(--gold);letter-spacing:.28em;font-size:14px;text-transform:uppercase}
-  .marquee span{margin:0 26px;opacity:.85}
+  #regions{padding-bottom:96px}
+  #regions .textsec{padding:72px 24px 8px}
+  .scrollrow{max-width:760px;margin:8px auto 0;overflow:hidden;white-space:nowrap;padding:12px 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}
+  .track{display:inline-block;animation:scroll 26s linear infinite}
+  .track a{color:var(--gold);letter-spacing:.22em;font-size:14px;text-transform:uppercase;margin:0 22px;cursor:pointer;transition:color .2s}
+  .track a:hover{color:var(--gold-bright)}
+  .credits{position:relative;width:100%;max-width:620px;height:320px;overflow:hidden;margin:18px auto;
+    -webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+  .credits .ct{position:absolute;left:0;right:0;top:0;animation:credup linear infinite}
+  .credits .ct a{display:block;text-align:center;color:var(--gold);letter-spacing:.14em;font-size:15px;padding:9px 0;cursor:pointer;transition:color .2s}
+  .credits .ct a:hover{color:var(--gold-bright)}
+  @keyframes credup{from{transform:translateY(0)}to{transform:translateY(-50%)}}
   @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* Connect Your Business */
   .connect{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:36px}
-  .ccard{border:1px solid rgba(193,146,47,.28);border-radius:12px;padding:26px 22px;text-align:left;background:linear-gradient(180deg,rgba(193,146,47,.05),rgba(0,0,0,0));transition:.3s}
-  .ccard:hover{border-color:var(--gold);box-shadow:0 0 26px rgba(193,146,47,.18)}
+  .ccard{padding:20px 4px;text-align:left}
+  .ccard:hover h3{color:var(--gold-bright)}
   .ccard .cat{color:#b9ad95;letter-spacing:.18em;font-size:11px;text-transform:uppercase}
   .ccard h3{color:var(--ink);font-weight:500;font-size:19px;margin:10px 0 20px;line-height:1.35}
   .ccard a{display:inline-block;color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;padding:10px 20px;letter-spacing:.08em;font-size:12px;transition:.3s}
@@ -73,22 +83,14 @@
   .modal.open{display:flex}
   .film{width:min(90vw,960px);aspect-ratio:16/9;background:#0a0a0a;border:1px solid rgba(193,146,47,.4);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);letter-spacing:.15em;font-size:14px;box-shadow:0 0 60px rgba(193,146,47,.15)}
   .close{position:absolute;top:22px;right:26px;color:var(--gold);background:none;border:1px solid rgba(193,146,47,.5);border-radius:4px;padding:8px 14px;letter-spacing:.12em;cursor:pointer;font-size:12px}
-
-  /* Introducing letter reveal (mask lifts off the baked letters one at a time) */
-  .reveal{position:absolute;overflow:hidden;z-index:4;pointer-events:none}
-  .reveal i{position:absolute;top:0;height:100%;background:#000;opacity:1;
-    -webkit-mask-image:linear-gradient(#0000,#000 14%,#000 86%,#0000);mask-image:linear-gradient(#0000,#000 14%,#000 86%,#0000)}
-  .reveal.go i{animation:rvl .55s ease forwards}
-  @keyframes rvl{to{opacity:0}}
   /* Capabilities explorer */
   .wheelwrap{position:relative;width:100%;max-width:1192px}
   .wheelwrap>img{display:block;width:100%;height:auto}
-  .cap-hot{position:absolute;z-index:4;border:1px solid transparent;border-radius:50%;cursor:pointer;text-indent:-9999px;overflow:hidden;transition:border-color .25s,background .25s}
-  .cap-hot:hover,.cap-hot.active{border-color:rgba(230,184,74,.75)}
+  .cap-hot{position:absolute;z-index:4;border:none;border-radius:50%;cursor:pointer;text-indent:-9999px;overflow:hidden;background:transparent}
   .veil{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;opacity:0;transition:opacity .5s ease}
   .veil.on{opacity:1}
-  .panel{width:100%;max-width:980px;padding:22px 24px 64px}
-  .panel-inner{border:1px solid rgba(193,146,47,.28);border-radius:14px;padding:32px 30px;background:linear-gradient(180deg,rgba(193,146,47,.05),rgba(0,0,0,0))}
+  .panel{width:100%;max-width:980px;padding:64px 24px 96px}
+  .panel-inner{padding:8px 24px;max-width:840px;margin:0 auto}
   .panel h3{color:var(--gold-bright);font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(20px,3vw,30px);margin:0}
   .divider{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:16px 0;width:0;transition:width .55s ease}
   .panel.show .divider{width:72%}
@@ -96,8 +98,8 @@
   #capFeatures{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
   #capFeatures li{color:#c9bd9f;font-size:14px;padding-left:18px;position:relative;line-height:1.5}
   #capFeatures li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
-  .cta{display:inline-block;margin-top:24px;color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;padding:11px 22px;letter-spacing:.08em;font-size:13px;transition:.3s}
-  .cta:hover{background:rgba(193,146,47,.12)}
+  .cta{display:inline-block;margin-top:24px;color:var(--gold-bright);padding:8px 0;letter-spacing:.22em;font-size:12px;text-transform:uppercase;border-bottom:1px solid rgba(193,146,47,.5);transition:.3s}
+  .cta:hover{color:#fff2cf;border-color:var(--gold)}
   .capbody{transition:opacity .28s ease,transform .28s ease}
   .capbody.swap{opacity:0;transform:translateY(8px)}
   @media(max-width:640px){#capFeatures{grid-template-columns:1fr}}
@@ -110,9 +112,39 @@
   .siteheader .req{color:var(--gold-bright);border:1px solid rgba(193,146,47,.5);border-radius:40px;
     padding:8px 16px;letter-spacing:.08em;font-size:12px;transition:.3s}
   .siteheader .req:hover{background:rgba(193,146,47,.12)}
+  section.section{padding:0}
+  .stat{cursor:pointer}
+  .stat:hover b{color:#fff2cf}
+  .zoom{animation:zoom 14s ease-in-out infinite}
+  @keyframes zoom{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  .gnode{position:absolute;width:2.4%;height:1.7%;border-radius:50%;transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(255,240,200,.95),rgba(230,184,74,.5) 45%,transparent 70%);
+    opacity:.12;animation:gseq 7.2s linear infinite}
+  @keyframes gseq{0%,13%{opacity:1}18%,100%{opacity:.12}}
+  .baci{position:relative;color:var(--gold-bright);cursor:pointer;text-decoration:none;white-space:nowrap;letter-spacing:.06em}
+  .baci::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);background-size:45% 100%;
+    background-repeat:no-repeat;animation:sweep 3.4s ease-in-out infinite alternate}
+  @keyframes sweep{0%{background-position:-45% 0}100%{background-position:145% 0}}
+  .writeup{max-width:820px;margin:0 auto;padding:60px 24px 84px;text-align:center}
+  .writeup h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:var(--champ);font-size:clamp(22px,3.4vw,32px);line-height:1.22;margin:0 0 26px;letter-spacing:.02em}
+  .writeup p{color:#c9bd9f;font-size:16px;line-height:1.75;margin:0 auto 16px;max-width:40em}
+  .writeup .cta{margin-top:22px}
+  .exec{max-width:1300px;margin:0 auto;padding:96px 40px}
+  .exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .exec .rule{width:64px;height:1px;background:var(--gold);margin:20px 0 30px}
+  .exec h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:var(--champ);font-size:clamp(26px,3.6vw,42px);line-height:1.14;margin:0 0 26px}
+  .exec p{color:#c9bd9f;font-size:16px;line-height:1.75;margin:0 0 18px;max-width:34em}
+  .exec .laptop{width:100%;height:auto;display:block;filter:drop-shadow(0 30px 60px rgba(193,146,47,.08))}
+  .exec .subnav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:60px;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.3em;font-size:14px;text-transform:uppercase}
+  .exec .subnav a{color:var(--champ);text-decoration:none;padding:0 30px;transition:color .3s}
+  .exec .subnav a:hover{color:var(--gold-bright)}
+  .exec .subnav .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .exec .subnav .bar{width:1px;height:20px;background:rgba(193,146,47,.4)}
+  @media(max-width:820px){.exec{padding:56px 22px}.exec-grid{grid-template-columns:1.04fr .96fr;gap:20px}.exec p{font-size:13.5px}.exec .subnav{margin-top:40px}.exec .subnav a{padding:0 14px;font-size:11px;letter-spacing:.18em}}
   .tilelink{display:block;width:100%;position:relative;transition:box-shadow .3s}
   .tilelink>img{display:block;width:100%;height:auto}
-  .tilelink:hover{box-shadow:inset 0 0 0 1px rgba(193,146,47,.4),0 0 30px rgba(193,146,47,.12)}
+  .tilelink:hover{opacity:.97}
   .fade{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
   .fade.in{opacity:1;transform:none}
   .mobile-cta{display:none}
@@ -124,13 +156,12 @@
 
   <header class="siteheader" id="siteHeader">
     <a href="#top" aria-label="BACI home"><img src="logo.webp" alt="BACI" /></a>
-    <a class="req" href="#connect">Request access</a>
   </header>
 
   <!-- S1 HERO -->
   <section class="hero" id="top" aria-label="BACI hero">
     <div class="stage" id="stage">
-      <img src="hero.webp" alt="BACI — the future of growth is intelligence." />
+      <img src="01-hero.webp" alt="BACI — the future of growth is intelligence." />
       <canvas id="fx"></canvas>
       <a class="hot h-logo" href="#top">BACI</a>
       <a class="hot h-disc" href="#growth-broken">Discover</a>
@@ -147,38 +178,39 @@
       <a class="card c6" href="#every-industry">Market shift detected</a>
       <a class="card c7" href="#modes">Intelligence engine</a>
       <a class="card c8" href="#capabilities">Predictive outcome</a>
+      <a class="hot" style="left:2%;top:68%;width:13.5%;height:10.5%" href="#regions" aria-label="150+ countries">Countries</a>
+      <a class="hot" style="left:15.86%;top:68%;width:13.5%;height:10.5%" href="#regions" aria-label="70+ languages">Languages</a>
+      <a class="hot" style="left:29.7%;top:68%;width:13.5%;height:10.5%" href="#built-for-growth" aria-label="9 regions">Regions</a>
+      <a class="hot" style="left:43.6%;top:68%;width:13.5%;height:10.5%" href="#capabilities" aria-label="70+ intelligence engines">Intelligence engines</a>
+      <a class="hot" style="left:57.4%;top:68%;width:13.5%;height:10.5%" href="#modes" aria-label="3 operating modes">Operating modes</a>
+      <a class="hot" style="left:71.3%;top:68%;width:13.5%;height:10.5%" href="#capabilities" aria-label="24/7 execution cycles">Execution cycles</a>
+      <a class="hot" style="left:85.1%;top:68%;width:13.5%;height:10.5%" href="#introducing" aria-label="Infinite intelligence">Infinite intelligence</a>
       <div class="counter"><span id="sig">37,942,118</span></div>
     </div>
   </section>
 
   <!-- S2 GLOBAL REGIONS CAROUSEL -->
   <section class="section" id="regions" style="flex-direction:column;align-items:center">
-    <div class="textsec">
-      <div class="eyebrow">Global reach · Local precision</div>
-      <div class="stats">
-        <div class="stat"><b>150+</b><span>Countries</span></div>
-        <div class="stat"><b>70+</b><span>Languages</span></div>
-        <div class="stat"><b>9</b><span>Regions</span></div>
-        <div class="stat"><b>70+</b><span>Intelligence engines</span></div>
-        <div class="stat"><b>3</b><span>Operating modes</span></div>
-        <div class="stat"><b>24/7</b><span>Execution</span></div>
-        <div class="stat"><b>&#8734;</b><span>Infinite intelligence</span></div>
-      </div>
-    </div>
-    <div class="marquee" aria-hidden="true"><div>
-      <span>Africa</span>&middot;<span>Asia</span>&middot;<span>Europe</span>&middot;<span>MENA</span>&middot;<span>North America</span>&middot;<span>Latin America</span>&middot;<span>Caribbean</span>&middot;<span>Oceania</span>&middot;<span>Europe &amp; MENA</span>&middot;
-      <span>Africa</span>&middot;<span>Asia</span>&middot;<span>Europe</span>&middot;<span>MENA</span>&middot;<span>North America</span>&middot;<span>Latin America</span>&middot;<span>Caribbean</span>&middot;<span>Oceania</span>&middot;<span>Europe &amp; MENA</span>&middot;
-    </div></div>
-    <div class="stage" style="max-width:1536px"><img src="global-reach.webp" loading="lazy" alt="Global reach — infinite intelligence" /></div>
+    <div class="scrollrow"><div class="track" id="regionTrack"></div></div>
   </section>
 
-  <!-- S3 GROWTH IS BROKEN (with drowning-in-data + intelligence-lives as its visuals) -->
+  <section class="section" id="global-reach" style="flex-direction:column;align-items:center">
+    <div class="textsec">
+      <div class="eyebrow">Global reach · Local precision</div>
+      <div class="stats" style="flex-wrap:nowrap;overflow-x:auto">
+        <a class="stat" href="#regions"><b>150+</b><span>Countries</span></a>
+        <a class="stat" href="#regions"><b>70+</b><span>Languages</span></a>
+        <a class="stat" href="#built-for-growth"><b>9</b><span>Regions</span></a>
+        <a class="stat" href="#capabilities"><b>70+</b><span>Intelligence engines</span></a>
+        <a class="stat" href="#modes"><b>3</b><span>Operating modes</span></a>
+        <a class="stat" href="#capabilities"><b>24/7</b><span>Execution</span></a>
+        <a class="stat" href="#introducing"><b>&#8734;</b><span>Infinite intelligence</span></a>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="growth-broken" style="flex-direction:column;align-items:center">
-    <div class="stage" style="max-width:1122px"><img src="growth-broken.webp" loading="lazy" alt="The reality — growth is broken" /></div>
-    <div class="stage" style="max-width:1672px"><img src="drowning-data.webp" loading="lazy" alt="Businesses are drowning in data" /></div>
-    <div class="stage" style="max-width:1672px"><img src="intelligence-lives.webp" loading="lazy" alt="Intelligence lives in one system, execution in another, strategy somewhere else" /></div>
-    <a class="tilelink fade" href="#introducing" style="max-width:1536px" aria-label="Businesses aren't short of data, they're short of certainty"><img src="certainty.webp" loading="lazy" alt="Businesses aren't short of data. They're short of certainty." /></a>
-    <a class="tilelink fade" href="#introducing" style="max-width:1672px" aria-label="What if it didn't"><img src="whatif.webp" loading="lazy" alt="What if it didn't?" /></a>
+    <div class="stage" style="max-width:1122px"><img src="04-growth-is-broken.webp" loading="lazy" alt="The reality — growth is broken" /><span class="gnode" style="left:43.5%;top:5%;animation-delay:0.0s"></span><span class="gnode" style="left:43.5%;top:11.5%;animation-delay:0.8s"></span><span class="gnode" style="left:43.5%;top:18%;animation-delay:1.6s"></span><span class="gnode" style="left:43.5%;top:27%;animation-delay:2.4s"></span><span class="gnode" style="left:43.5%;top:33%;animation-delay:3.2s"></span><span class="gnode" style="left:43.5%;top:42%;animation-delay:4.0s"></span><span class="gnode" style="left:43.5%;top:50%;animation-delay:4.8s"></span><span class="gnode" style="left:43.5%;top:59%;animation-delay:5.6s"></span><span class="gnode" style="left:43.5%;top:73%;animation-delay:6.4s"></span><a class="hot" style="left:30%;top:74.5%;width:40%;height:5%" href="#capabilities" aria-label="What if it didn't">What if it didn't</a><a class="hot" style="left:38%;top:86%;width:24%;height:5%" href="#connect" aria-label="BACI">BACI</a></div>
   </section>
 
   <!-- S4 INTRODUCING BACI -->
@@ -186,61 +218,43 @@
     <a class="tilelink fade" href="#doctrine" style="max-width:1536px" aria-label="The future of growth is intelligence"><img src="future-intelligence.webp" loading="lazy" alt="The future of growth is intelligence." /></a>
     <div class="stage" style="max-width:1536px">
       <img src="introducing.webp" loading="lazy" alt="Introducing BACI" />
-      <div class="reveal" id="rvIntro" style="left:28.6%;top:32%;width:42.4%;height:6.5%"></div>
-      <div class="reveal" id="rvBaci" style="left:23.4%;top:42.5%;width:53.6%;height:15%"></div>
     </div>
+    <div class="credits"><div class="ct" id="countryCredits"></div></div>
+    <div class="panel" id="cPanel" style="display:none;max-width:820px"><div class="panel-inner"><h3 id="cTitle"></h3><div class="divider"></div><div class="capbody"><p id="cBody"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
+  </section>
+
+  <!-- INTRODUCING BACI (summary) -->
+  <section class="section" id="exec" style="flex-direction:column;align-items:center">
+    <div class="textsec" style="max-width:840px;text-align:left">
+      <div class="eyebrow">Introducing BACI</div>
+      <p class="sub">The world has never generated more data, more signals, more intelligence, or more opportunity. And yet most organisations have never felt more uncertain about where to focus, where to invest, and where to grow. Not because the information isn't there. Because the intelligence isn't.</p>
+      <p class="sub">BACI was built for this moment. To take everything a business needs to acquire customers, convert opportunities and grow revenue, and bring it together into one continuously evolving intelligence system that never stops analysing, never stops adapting, and never stops working.</p>
+      <p class="sub">BACI doesn't just tell you what is happening. It tells you what it means, what to do about it, and what happens next.</p>
+      <p class="sub">The organisations that will define their markets in the next decade will not be the ones with the most tools. They will be the ones with the clearest intelligence. BACI exists to help you become that organisation.</p>
+      <a class="cta" href="#connect">Connect your business</a>
+    </div>
+  </section>
+
+  <section class="section" id="one-system" style="flex-direction:column;align-items:center">
+    <div class="stage" style="max-width:1672px"><img src="06-one-intelligence-system.webp" loading="lazy" alt="Intelligence lives in one system, execution in another, strategy somewhere else" /><a class="hot" data-grp="cl" data-k="Content" style="left:14%;top:16%;width:13%;height:16%">Content</a><a class="hot" data-grp="cl" data-k="Experience" style="left:23%;top:14%;width:13%;height:16%">Experience</a><a class="hot" data-grp="cl" data-k="Commerce" style="left:19%;top:42%;width:13%;height:16%">Commerce</a><a class="hot" data-grp="cl" data-k="Strategy" style="left:9%;top:58%;width:13%;height:16%">Strategy</a></div><div class="panel" id="clPanel" style="display:none;max-width:900px"><div class="panel-inner"><h3 id="clT"></h3><div class="divider"></div><div class="capbody"><p id="clB"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
   </section>
 
   <!-- S5 BACI DOCTRINE -->
-  <section class="section" id="doctrine">
+  <section class="section" id="doctrine" style="flex-direction:column;align-items:center">
     <div class="stage" style="max-width:1024px">
-      <img src="doctrine.webp" loading="lazy" alt="The BACI doctrine — Acquire, Convert, Grow" />
-      <a class="hot pulse" style="left:29.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%" href="#capabilities">Acquire</a>
-      <a class="hot pulse" style="left:51.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%;animation-delay:1.2s" href="#capabilities">Convert</a>
-      <a class="hot pulse" style="left:40.3%;top:51.1%;width:18.6%;height:12.4%;border-radius:50%;animation-delay:2.4s" href="#capabilities">Grow</a>
+      <img src="06-acquire-convert-grow.webp" loading="lazy" alt="The BACI doctrine — Acquire, Convert, Grow" /><a class="hot" href="#regions" style="left:4%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#regions" style="left:17%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#built-for-growth" style="left:29%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#capabilities" style="left:41%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#modes" style="left:54%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#capabilities" style="left:66%;top:13.5%;width:12%;height:4%">s</a><a class="hot" href="#introducing" style="left:79%;top:13.5%;width:12%;height:4%">s</a>
+      <a class="hot" data-grp="doc" data-k="Acquire" style="left:29.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%">Acquire</a>
+      <a class="hot" data-grp="doc" data-k="Convert" style="left:51.3%;top:38.7%;width:18.6%;height:12.4%;border-radius:50%">Convert</a>
+      <a class="hot" data-grp="doc" data-k="Grow" style="left:40.3%;top:51.1%;width:18.6%;height:12.4%;border-radius:50%">Grow</a>
     </div>
-  </section>
-
-  <!-- S6 BUILT FOR GROWTH -->
-  <section class="section" id="built-for-growth">
-    <div class="stage" style="max-width:1536px">
-      <img src="industries.webp" loading="lazy" alt="Built for growth — every industry" />
-      <a class="hot" style="left:14%;top:4.9%;width:13%;height:6.8%" href="#every-industry">Retail</a>
-      <a class="hot" style="left:39.1%;top:4.4%;width:16%;height:7.8%" href="#every-industry">Professional services</a>
-      <a class="hot" style="left:64.8%;top:4.4%;width:14%;height:7.8%" href="#every-industry">Human resources</a>
-      <a class="hot" style="left:15.6%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Healthcare</a>
-      <a class="hot" style="left:36.6%;top:87.8%;width:16%;height:7.8%" href="#every-industry">Tendering and bidding</a>
-      <a class="hot" style="left:58.4%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Real estate</a>
-      <a class="hot" style="left:76.6%;top:88.4%;width:13%;height:6.8%" href="#every-industry">Procurement</a>
-    </div>
-  </section>
-
-  <!-- S7 EVERY INDUSTRY IS DIFFERENT (Industry Intelligence Explorer) -->
-  <section class="section" id="every-industry">
-    <div class="stage" style="max-width:1344px">
-      <img src="industry-explorer.webp" loading="lazy" alt="Industry Intelligence Explorer — every industry is different" />
-      <!-- industry tabs (first-pass positions) -->
-      <a class="hot" style="left:3%;top:37%;width:8%;height:6%" href="#every-industry">Social media management</a>
-      <a class="hot" style="left:11%;top:37%;width:7%;height:6%" href="#every-industry">Skincare and beauty</a>
-      <a class="hot" style="left:17%;top:37%;width:7%;height:5%" href="#every-industry">Healthcare</a>
-      <a class="hot" style="left:24%;top:37%;width:7%;height:6%" href="#every-industry">Human resources</a>
-      <a class="hot" style="left:31%;top:37%;width:5%;height:5%" href="#every-industry">Retail</a>
-      <a class="hot" style="left:36%;top:37%;width:6.5%;height:5%" href="#every-industry">Real estate</a>
-      <a class="hot" style="left:43%;top:37%;width:6.5%;height:5%" href="#every-industry">Hospitality</a>
-      <a class="hot" style="left:50%;top:37%;width:4%;height:5%" href="#every-industry">Legal</a>
-      <a class="hot" style="left:54.5%;top:37%;width:6%;height:5%" href="#every-industry">Education</a>
-      <a class="hot" style="left:61%;top:37%;width:6.5%;height:5%" href="#every-industry">Technology</a>
-      <a class="hot" style="left:68%;top:37%;width:7%;height:5%" href="#every-industry">Construction</a>
-      <a class="hot" style="left:75.5%;top:37%;width:5%;height:5%" href="#every-industry">Finance</a>
-      <a class="hot" style="left:82%;top:35%;width:16%;height:6.5%" href="#every-industry">Explore any industry</a>
-    </div>
+    <div class="panel" id="docPanel" style="display:none;max-width:820px"><div class="panel-inner"><h3 id="docT"></h3><div class="divider"></div><div class="capbody"><p id="docB"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
   </section>
 
   <!-- S8 CAPABILITIES — interactive explorer -->
   <section class="section" id="capabilities" style="flex-direction:column;align-items:center">
     <a class="tilelink fade" href="#capabilities" style="max-width:1535px" aria-label="Because the future of growth is not more tools"><img src="not-more-tools.webp" loading="lazy" alt="Because the future of growth is not more tools." /></a>
     <div class="wheelwrap">
-      <img src="capabilities-wheel.webp" loading="lazy" alt="BACI capabilities wheel" />
+      <img src="07-baci-doctrine-capabilities.webp" loading="lazy" alt="BACI capabilities wheel" />
       <svg class="veil" id="capVeil" viewBox="0 0 1192 855" aria-hidden="true">
         <defs><mask id="capMask">
           <rect width="1192" height="855" fill="#fff"/>
@@ -274,23 +288,117 @@
     </div>
   </section>
 
+  <!-- EXECUTIVE INTELLIGENCE -->
+  <section class="section" id="executive-intelligence">
+    <div class="exec">
+      <div class="exec-grid">
+        <div>
+          <div class="eyebrow">Executive<br>Intelligence</div>
+          <div class="rule"></div>
+          <h2>Great organisations are built on great decisions.</h2>
+          <p>The BACI Executive Intelligence Library brings together executive briefings, commercial insight, strategic guidance, and research across the disciplines that shape successful organisations.</p>
+          <p>From business planning and international expansion to financial forecasting, procurement, grant funding, market intelligence, and executive decision-making, the library is designed to help organisations think more strategically, act with greater confidence, and achieve sustainable growth through continuously evolving intelligence.</p>
+          <a class="cta" href="#connect">Connect your business</a>
+        </div>
+        <div class="laptop-wrap">
+          <svg class="laptop" viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" aria-label="BACI on screen">
+            <defs>
+              <linearGradient id="egold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a22"/><stop offset=".5" stop-color="#E6B84A"/><stop offset="1" stop-color="#8a6a22"/></linearGradient>
+              <radialGradient id="eglow" cx="50%" cy="50%" r="42%"><stop offset="0" stop-color="rgba(230,184,74,.22)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/></radialGradient>
+            </defs>
+            <rect x="150" y="30" width="460" height="300" rx="14" fill="#070707" stroke="url(#egold)" stroke-width="2"/>
+            <rect x="150" y="30" width="460" height="300" rx="14" fill="url(#eglow)"/>
+            <text x="380" y="186" text-anchor="middle" font-family="'Century Gothic','Futura','Helvetica Neue',Arial,sans-serif" font-size="64" letter-spacing="14" fill="url(#egold)" style="font-weight:300">BACI</text>
+            <rect x="332" y="210" width="96" height="2" fill="url(#egold)"/><circle cx="380" cy="211" r="6" fill="rgba(230,184,74,.9)"/>
+            <path d="M120 330 L640 330 L700 390 L60 390 Z" fill="#0b0b0b" stroke="url(#egold)" stroke-width="2"/>
+            <rect x="352" y="342" width="56" height="6" rx="3" fill="rgba(193,146,47,.4)"/>
+          </svg>
+        </div>
+      </div>
+      <nav class="subnav">
+        <a href="#capabilities">Explore</a><span class="dot"></span><span class="bar"></span>
+        <a href="#capabilities">Learn</a><span class="dot"></span><span class="bar"></span>
+        <a href="#connect">Lead</a><span class="dot"></span><span class="bar"></span>
+        <a href="#connect">Evolve</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- S6 BUILT FOR GROWTH -->
+  <section class="section" id="built-for-growth" style="flex-direction:column;align-items:center">
+    <div class="stage" style="max-width:1536px">
+      <img src="09-built-for-growth.webp" loading="lazy" alt="Built for growth — every industry" />
+      <a class="hot" style="left:14%;top:4.9%;width:13%;height:6.8%" data-grp="ind" data-k="Retail">Retail</a>
+      <a class="hot" style="left:39.1%;top:4.4%;width:16%;height:7.8%" data-grp="ind" data-k="Professional services">Professional services</a>
+      <a class="hot" style="left:64.8%;top:4.4%;width:14%;height:7.8%" data-grp="ind" data-k="Human resources">Human resources</a>
+      <a class="hot" style="left:15.6%;top:88.4%;width:13%;height:6.8%" data-grp="ind" data-k="Healthcare">Healthcare</a>
+      <a class="hot" style="left:36.6%;top:87.8%;width:16%;height:7.8%" data-grp="ind" data-k="Tendering and bidding">Tendering and bidding</a>
+      <a class="hot" style="left:58.4%;top:88.4%;width:13%;height:6.8%" data-grp="ind" data-k="Real estate">Real estate</a>
+      <a class="hot" style="left:76.6%;top:88.4%;width:13%;height:6.8%" data-grp="ind" data-k="Procurement">Procurement</a>
+    <a class="hot" data-grp="city" data-k="New York" style="left:18%;top:30%;width:7%;height:6%">New York</a><a class="hot" data-grp="city" data-k="London" style="left:30%;top:22%;width:7%;height:6%">London</a><a class="hot" data-grp="city" data-k="Dubai" style="left:40%;top:34%;width:7%;height:6%">Dubai</a><a class="hot" data-grp="city" data-k="Nairobi" style="left:37%;top:44%;width:7%;height:6%">Nairobi</a><a class="hot" data-grp="city" data-k="Singapore" style="left:52%;top:47%;width:7%;height:6%">Singapore</a><a class="hot" data-grp="city" data-k="Hong Kong" style="left:57%;top:35%;width:7%;height:6%">Hong Kong</a></div>
+    <div class="panel" id="indPanel" style="display:none;max-width:900px"><div class="panel-inner"><h3 id="indT"></h3><div class="divider"></div><div class="capbody"><p id="indB"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
+  </section>
+
+  <!-- S7 EVERY INDUSTRY IS DIFFERENT (Industry Intelligence Explorer) -->
+  <section class="section" id="every-industry" style="flex-direction:column;align-items:center">
+    <div class="stage" style="max-width:1344px">
+      <img src="10-industry-intelligence-explorer.webp" loading="lazy" alt="Industry Intelligence Explorer — every industry is different" />
+      <!-- industry tabs (first-pass positions) -->
+      <a class="hot" style="left:3%;top:37%;width:8%;height:6%" href="#every-industry">Social media management</a>
+      <a class="hot" style="left:11%;top:37%;width:7%;height:6%" href="#every-industry">Skincare and beauty</a>
+      <a class="hot" style="left:17%;top:37%;width:7%;height:5%" href="#every-industry">Healthcare</a>
+      <a class="hot" style="left:24%;top:37%;width:7%;height:6%" href="#every-industry">Human resources</a>
+      <a class="hot" style="left:31%;top:37%;width:5%;height:5%" href="#every-industry">Retail</a>
+      <a class="hot" style="left:36%;top:37%;width:6.5%;height:5%" href="#every-industry">Real estate</a>
+      <a class="hot" style="left:43%;top:37%;width:6.5%;height:5%" href="#every-industry">Hospitality</a>
+      <a class="hot" style="left:50%;top:37%;width:4%;height:5%" href="#every-industry">Legal</a>
+      <a class="hot" style="left:54.5%;top:37%;width:6%;height:5%" href="#every-industry">Education</a>
+      <a class="hot" style="left:61%;top:37%;width:6.5%;height:5%" href="#every-industry">Technology</a>
+      <a class="hot" style="left:68%;top:37%;width:7%;height:5%" href="#every-industry">Construction</a>
+      <a class="hot" style="left:75.5%;top:37%;width:5%;height:5%" href="#every-industry">Finance</a>
+      <a class="hot" style="left:82%;top:35%;width:16%;height:6.5%" href="#every-industry">Explore any industry</a>
+    </div>
+    <div class="credits"><div class="ct" id="langCredits"></div></div>
+    <div class="panel" id="lPanel" style="display:none;max-width:820px"><div class="panel-inner"><h3 id="lTitle"></h3><div class="divider"></div><div class="capbody"><p id="lBody"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
+  </section>
+
+  <section class="section" id="drowning" style="flex-direction:column;align-items:center">
+    <div class="stage" style="max-width:1672px"><img class="zoom" src="11-drowning-in-data.webp" loading="lazy" alt="Businesses are drowning in data" /></div>
+    <div class="writeup"><h2>Businesses are drowning in data</h2><p>Data has never been more abundant.</p><p>Every day organisations generate customer interactions, campaign results, financial reports, operational metrics, market movements, competitor activity, and behavioural signals across dozens of disconnected systems.</p><p>The challenge is no longer collecting information. It is understanding what matters, recognising what is changing, and knowing what to do next.</p><p>Without intelligence, more data creates more complexity. With intelligence, the same data becomes direction, confidence, and opportunity.</p><p>BACI transforms overwhelming volumes of information into clear, actionable intelligence, helping organisations make faster decisions, reduce uncertainty, and uncover opportunities that would otherwise remain hidden.</p><a class="cta" href="#connect">Connect your business</a></div>
+  </section>
+
+  <section class="section" id="certainty" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#introducing" style="max-width:1536px" aria-label="Businesses aren't short of data, they're short of certainty"><img src="12-short-of-certainty.webp" loading="lazy" alt="Businesses aren't short of data. They're short of certainty." /></a>
+    <div class="writeup"><h2>Businesses aren't short of data. They're short of certainty.</h2><p>Most organisations already possess the information they need to grow.</p><p>What they often lack is the confidence to know which customers to prioritise, which markets to enter, which campaigns to launch, which investments to make, and which opportunities will create the greatest return.</p><p>Intelligence removes uncertainty.</p><p>By continuously analysing data, recognising patterns, identifying opportunities, and predicting outcomes, BACI transforms information into clarity — helping organisations move forward with greater confidence and greater precision.</p><p>When certainty improves, decisions improve. When decisions improve, performance follows.</p><a class="cta" href="#connect">Connect your business</a></div>
+  </section>
+
+  <section class="section" id="what-if" style="flex-direction:column;align-items:center">
+    <a class="tilelink fade" href="#capabilities" style="max-width:1672px" aria-label="What if it didn't"><img src="13-what-if-they-werent.webp" loading="lazy" alt="What if it didn't?" /></a>
+    <div class="writeup"><h2>What if they weren't?</h2><p>What if every important decision was supported by continuously evolving intelligence?</p><p>What if you could identify opportunities before your competitors?</p><p>What if you understood not only what happened, but why it happened — and what to do next?</p><p>What if your organisation could acquire customers more intelligently, convert opportunities more consistently, and grow with greater confidence?</p><p>That future isn't years away. It's available today.</p><p>Welcome to BACI.</p><a class="cta" href="#connect">Connect your business</a></div>
+  </section>
+
   <!-- S9 MODES -->
   <section class="section" id="modes" style="flex-direction:column;align-items:center">
     <a class="tilelink fade" href="#connect" style="max-width:1536px" aria-label="We provide the intelligence, you decide the path"><img src="decide-path.webp" loading="lazy" alt="We provide the intelligence. You decide the path." /></a>
     <div class="stage" style="max-width:1402px">
-      <img src="modes.webp" loading="lazy" alt="Three modes — Manual, Hybrid, Autonomous" />
-      <a class="hot" style="left:14%;top:34%;width:14.5%;height:28%;border-radius:12px" href="#connect">Manual</a>
-      <a class="hot" style="left:42%;top:32%;width:15%;height:30%;border-radius:12px" href="#connect">Hybrid</a>
-      <a class="hot" style="left:70%;top:34%;width:22%;height:28%;border-radius:12px" href="#connect">Autonomous</a>
+      <img src="14-modes.webp" loading="lazy" alt="Three modes — Manual, Hybrid, Autonomous" />
+      <a class="hot" data-grp="mode" data-k="Manual" style="left:14%;top:34%;width:14.5%;height:28%;border-radius:12px">Manual</a>
+      <a class="hot" data-grp="mode" data-k="Hybrid" style="left:42%;top:32%;width:15%;height:30%;border-radius:12px">Hybrid</a>
+      <a class="hot" data-grp="mode" data-k="Autonomous" style="left:70%;top:34%;width:22%;height:28%;border-radius:12px">Autonomous</a>
     </div>
+    <div class="panel" id="modePanel" style="display:none;max-width:820px"><div class="panel-inner"><h3 id="modeT"></h3><div class="divider"></div><div class="capbody"><p id="modeB"></p></div><a class="cta" href="#connect">Connect your business</a></div></div>
   </section>
 
   <!-- S10 FILM -->
   <section class="section" id="film" style="flex-direction:column;align-items:center">
-    <div class="filmsec">
-      <div class="eyebrow">The film</div>
-      <div class="headline">See how the engine <span class="g">thinks.</span></div>
+    <div class="writeup">
+      <div class="eyebrow">The BACI film</div>
+      <p>Some ideas are better experienced than explained.</p>
+      <p>Discover how BACI transforms data into intelligence, intelligence into action, and action into measurable business growth.</p>
+      <p>In just a few minutes, you'll see how one continuously evolving intelligence platform helps organisations acquire customers, convert opportunities, optimise performance, and grow with greater confidence.</p>
+      <h2>See how the engine thinks.</h2>
       <button class="playbtn" id="filmBtn2" aria-label="Watch the film">&#9654;</button>
+      <div><a class="cta" href="#" id="filmLink">Watch the film</a></div>
     </div>
   </section>
 
@@ -314,7 +422,7 @@
   </section>
 
   <footer class="section" id="footer" style="flex-direction:column;align-items:center">
-    <a class="tilelink fade" href="#top" style="max-width:1402px" aria-label="BACI — back to top"><img src="footer-brand.webp" loading="lazy" alt="BACI — your growth, our intelligence" /></a>
+    <a class="tilelink fade" href="#top" style="max-width:1402px" aria-label="BACI — back to top"><img src="17-footer.webp" loading="lazy" alt="BACI — your growth, our intelligence" /></a>
   </footer>
 
   <div class="mobile-cta"><button id="filmBtnMobile">Watch the film &#9654;</button></div>
@@ -327,7 +435,7 @@
   <script>
     var modal=document.getElementById('filmModal');
     function openM(){modal.classList.add('open')} function closeM(){modal.classList.remove('open')}
-    ['filmBtn','filmBtn2','filmBtnMobile'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('click',openM)});
+    ['filmBtn','filmBtn2','filmBtnMobile','filmLink'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('click',openM)});
     document.getElementById('filmClose').addEventListener('click',closeM);
     modal.addEventListener('click',function(e){if(e.target===modal)closeM()});
     addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
@@ -346,18 +454,6 @@
     frame();
     var fo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');fo.unobserve(e.target);}});},{threshold:.15});
     document.querySelectorAll('.fade').forEach(function(el){fo.observe(el)});
-    (function(){
-      function build(el,count,step,start){ if(!el)return;
-        for(var k=0;k<count;k++){var b=document.createElement('i');
-          b.style.left=(k*100/count)+'%';b.style.width=(100/count)+'%';
-          b.style.animationDelay=(start+k*step)+'ms';el.appendChild(b);} }
-      var ri=document.getElementById('rvIntro'),rb=document.getElementById('rvBaci');
-      build(ri,11,70,0);      // INTRODUCING — 11 letters
-      build(rb,4,170,950);    // BACI — after Introducing finishes
-      var io=new IntersectionObserver(function(es){es.forEach(function(e){
-        if(e.isIntersecting){ri.classList.add('go');rb.classList.add('go');io.disconnect();}});},{threshold:.5});
-      if(ri)io.observe(ri.closest('section'));
-    })();
 
     // ---- Capabilities explorer ----
     var CAP={
@@ -394,7 +490,7 @@
         panel.classList.add('show');bodyWrap.classList.add('swap');
         setTimeout(function(){title.textContent=d.t;body.textContent=d.l;
           feats.innerHTML=d.f.map(function(x){return '<li>'+x+'</li>'}).join('');
-          cta.textContent='Explore '+d.t;cta.style.display='inline-block';
+          cta.textContent='Connect your business';cta.style.display='inline-block';
           bodyWrap.classList.remove('swap');},240);
       }
       hots.forEach(function(h){h.addEventListener('click',function(e){e.preventDefault();select(h.getAttribute('data-cap'),h)})});
@@ -402,8 +498,53 @@
 
     // Sticky header: reveal after the hero scrolls away
     (function(){var hd=document.getElementById('siteHeader'),hero=document.getElementById('top');
-      function onScroll(){var t=hero.offsetHeight*0.7;if(window.scrollY>t)hd.classList.add('show');else hd.classList.remove('show');}
+      function onScroll(){var t=hero.offsetHeight-10;if(window.scrollY>t)hd.classList.add('show');else hd.classList.remove('show');}
       addEventListener('scroll',onScroll,{passive:true});onScroll();})();
+
+    // ---- Countries + Languages scroll (samples now, expand later) ----
+    var COUNTRIES={"Algeria":{b:"Region: Africa. Languages: Arabic, Tamazight, French. BACI delivers audience, conversion and channel intelligence for Algeria \u2014 in its dominant language, with local resources."},"Angola":{b:"Region: Africa. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for Angola \u2014 in its dominant language, with local resources."},"Benin":{b:"Region: Africa. Languages: French. BACI delivers audience, conversion and channel intelligence for Benin \u2014 in its dominant language, with local resources."},"Botswana":{b:"Region: Africa. Languages: English, Tswana. BACI delivers audience, conversion and channel intelligence for Botswana \u2014 in its dominant language, with local resources."},"Burkina Faso":{b:"Region: Africa. Languages: French, Moor\u00e9. BACI delivers audience, conversion and channel intelligence for Burkina Faso \u2014 in its dominant language, with local resources."},"Burundi":{b:"Region: Africa. Languages: Kirundi, French. BACI delivers audience, conversion and channel intelligence for Burundi \u2014 in its dominant language, with local resources."},"Cabo Verde":{b:"Region: Africa. Languages: Portuguese, Cape Verdean Creole. BACI delivers audience, conversion and channel intelligence for Cabo Verde \u2014 in its dominant language, with local resources."},"Cameroon":{b:"Region: Africa. Languages: French, English. BACI delivers audience, conversion and channel intelligence for Cameroon \u2014 in its dominant language, with local resources."},"Central African Republic":{b:"Region: Africa. Languages: French, Sango. BACI delivers audience, conversion and channel intelligence for Central African Republic \u2014 in its dominant language, with local resources."},"Chad":{b:"Region: Africa. Languages: French, Arabic. BACI delivers audience, conversion and channel intelligence for Chad \u2014 in its dominant language, with local resources."},"Comoros":{b:"Region: Africa. Languages: Comorian, Arabic, French. BACI delivers audience, conversion and channel intelligence for Comoros \u2014 in its dominant language, with local resources."},"Congo":{b:"Region: Africa. Languages: French, Lingala. BACI delivers audience, conversion and channel intelligence for Congo \u2014 in its dominant language, with local resources."},"C\u00f4te d'Ivoire":{b:"Region: Africa. Languages: French. BACI delivers audience, conversion and channel intelligence for C\u00f4te d'Ivoire \u2014 in its dominant language, with local resources."},"DR Congo":{b:"Region: Africa. Languages: French, Lingala, Swahili. BACI delivers audience, conversion and channel intelligence for DR Congo \u2014 in its dominant language, with local resources."},"Djibouti":{b:"Region: Africa. Languages: French, Arabic, Somali. BACI delivers audience, conversion and channel intelligence for Djibouti \u2014 in its dominant language, with local resources."},"Egypt":{b:"Region: Africa. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Egypt \u2014 in its dominant language, with local resources."},"Equatorial Guinea":{b:"Region: Africa. Languages: Spanish, French, Portuguese. BACI delivers audience, conversion and channel intelligence for Equatorial Guinea \u2014 in its dominant language, with local resources."},"Eritrea":{b:"Region: Africa. Languages: Tigrinya, Arabic, English. BACI delivers audience, conversion and channel intelligence for Eritrea \u2014 in its dominant language, with local resources."},"Eswatini":{b:"Region: Africa. Languages: Swati, English. BACI delivers audience, conversion and channel intelligence for Eswatini \u2014 in its dominant language, with local resources."},"Ethiopia":{b:"Region: Africa. Languages: Amharic, Oromo, Somali. BACI delivers audience, conversion and channel intelligence for Ethiopia \u2014 in its dominant language, with local resources."},"Gabon":{b:"Region: Africa. Languages: French. BACI delivers audience, conversion and channel intelligence for Gabon \u2014 in its dominant language, with local resources."},"Gambia":{b:"Region: Africa. Languages: English. BACI delivers audience, conversion and channel intelligence for Gambia \u2014 in its dominant language, with local resources."},"Ghana":{b:"Region: Africa. Languages: English. BACI delivers audience, conversion and channel intelligence for Ghana \u2014 in its dominant language, with local resources."},"Guinea":{b:"Region: Africa. Languages: French. BACI delivers audience, conversion and channel intelligence for Guinea \u2014 in its dominant language, with local resources."},"Guinea-Bissau":{b:"Region: Africa. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for Guinea-Bissau \u2014 in its dominant language, with local resources."},"Kenya":{b:"Region: Africa. Languages: Swahili, English. BACI delivers audience, conversion and channel intelligence for Kenya \u2014 in its dominant language, with local resources."},"Lesotho":{b:"Region: Africa. Languages: Sesotho, English. BACI delivers audience, conversion and channel intelligence for Lesotho \u2014 in its dominant language, with local resources."},"Liberia":{b:"Region: Africa. Languages: English. BACI delivers audience, conversion and channel intelligence for Liberia \u2014 in its dominant language, with local resources."},"Libya":{b:"Region: Africa. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Libya \u2014 in its dominant language, with local resources."},"Madagascar":{b:"Region: Africa. Languages: Malagasy, French. BACI delivers audience, conversion and channel intelligence for Madagascar \u2014 in its dominant language, with local resources."},"Malawi":{b:"Region: Africa. Languages: Chichewa, English. BACI delivers audience, conversion and channel intelligence for Malawi \u2014 in its dominant language, with local resources."},"Mali":{b:"Region: Africa. Languages: French, Bambara. BACI delivers audience, conversion and channel intelligence for Mali \u2014 in its dominant language, with local resources."},"Mauritania":{b:"Region: Africa. Languages: Arabic, French. BACI delivers audience, conversion and channel intelligence for Mauritania \u2014 in its dominant language, with local resources."},"Mauritius":{b:"Region: Africa. Languages: English, French, Creole. BACI delivers audience, conversion and channel intelligence for Mauritius \u2014 in its dominant language, with local resources."},"Morocco":{b:"Region: Africa. Languages: Arabic, Tamazight, French. BACI delivers audience, conversion and channel intelligence for Morocco \u2014 in its dominant language, with local resources."},"Mozambique":{b:"Region: Africa. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for Mozambique \u2014 in its dominant language, with local resources."},"Namibia":{b:"Region: Africa. Languages: English, Afrikaans. BACI delivers audience, conversion and channel intelligence for Namibia \u2014 in its dominant language, with local resources."},"Niger":{b:"Region: Africa. Languages: French, Hausa. BACI delivers audience, conversion and channel intelligence for Niger \u2014 in its dominant language, with local resources."},"Nigeria":{b:"Region: Africa. Languages: English, Hausa, Yoruba, Igbo. BACI delivers audience, conversion and channel intelligence for Nigeria \u2014 in its dominant language, with local resources."},"Rwanda":{b:"Region: Africa. Languages: Kinyarwanda, French, English. BACI delivers audience, conversion and channel intelligence for Rwanda \u2014 in its dominant language, with local resources."},"S\u00e3o Tom\u00e9 & Pr\u00edncipe":{b:"Region: Africa. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for S\u00e3o Tom\u00e9 & Pr\u00edncipe \u2014 in its dominant language, with local resources."},"Senegal":{b:"Region: Africa. Languages: French, Wolof. BACI delivers audience, conversion and channel intelligence for Senegal \u2014 in its dominant language, with local resources."},"Sierra Leone":{b:"Region: Africa. Languages: English, Krio. BACI delivers audience, conversion and channel intelligence for Sierra Leone \u2014 in its dominant language, with local resources."},"Somalia":{b:"Region: Africa. Languages: Somali, Arabic. BACI delivers audience, conversion and channel intelligence for Somalia \u2014 in its dominant language, with local resources."},"South Africa":{b:"Region: Africa. Languages: Zulu, Xhosa, Afrikaans, English. BACI delivers audience, conversion and channel intelligence for South Africa \u2014 in its dominant language, with local resources."},"South Sudan":{b:"Region: Africa. Languages: English, Arabic. BACI delivers audience, conversion and channel intelligence for South Sudan \u2014 in its dominant language, with local resources."},"Sudan":{b:"Region: Africa. Languages: Arabic, English. BACI delivers audience, conversion and channel intelligence for Sudan \u2014 in its dominant language, with local resources."},"Tanzania":{b:"Region: Africa. Languages: Swahili, English. BACI delivers audience, conversion and channel intelligence for Tanzania \u2014 in its dominant language, with local resources."},"Togo":{b:"Region: Africa. Languages: French, Ewe. BACI delivers audience, conversion and channel intelligence for Togo \u2014 in its dominant language, with local resources."},"Tunisia":{b:"Region: Africa. Languages: Arabic, French. BACI delivers audience, conversion and channel intelligence for Tunisia \u2014 in its dominant language, with local resources."},"Uganda":{b:"Region: Africa. Languages: English, Swahili, Luganda. BACI delivers audience, conversion and channel intelligence for Uganda \u2014 in its dominant language, with local resources."},"Zambia":{b:"Region: Africa. Languages: English, Nyanja. BACI delivers audience, conversion and channel intelligence for Zambia \u2014 in its dominant language, with local resources."},"Zimbabwe":{b:"Region: Africa. Languages: English, Shona, Ndebele. BACI delivers audience, conversion and channel intelligence for Zimbabwe \u2014 in its dominant language, with local resources."},"Afghanistan":{b:"Region: Asia. Languages: Pashto, Dari. BACI delivers audience, conversion and channel intelligence for Afghanistan \u2014 in its dominant language, with local resources."},"Armenia":{b:"Region: Asia. Languages: Armenian. BACI delivers audience, conversion and channel intelligence for Armenia \u2014 in its dominant language, with local resources."},"Azerbaijan":{b:"Region: Asia. Languages: Azerbaijani. BACI delivers audience, conversion and channel intelligence for Azerbaijan \u2014 in its dominant language, with local resources."},"Bangladesh":{b:"Region: Asia. Languages: Bengali. BACI delivers audience, conversion and channel intelligence for Bangladesh \u2014 in its dominant language, with local resources."},"Bhutan":{b:"Region: Asia. Languages: Dzongkha. BACI delivers audience, conversion and channel intelligence for Bhutan \u2014 in its dominant language, with local resources."},"Brunei":{b:"Region: Asia. Languages: Malay, English. BACI delivers audience, conversion and channel intelligence for Brunei \u2014 in its dominant language, with local resources."},"Cambodia":{b:"Region: Asia. Languages: Khmer. BACI delivers audience, conversion and channel intelligence for Cambodia \u2014 in its dominant language, with local resources."},"China":{b:"Region: Asia. Languages: Mandarin. BACI delivers audience, conversion and channel intelligence for China \u2014 in its dominant language, with local resources."},"Cyprus":{b:"Region: Asia. Languages: Greek, Turkish. BACI delivers audience, conversion and channel intelligence for Cyprus \u2014 in its dominant language, with local resources."},"Georgia":{b:"Region: Asia. Languages: Georgian. BACI delivers audience, conversion and channel intelligence for Georgia \u2014 in its dominant language, with local resources."},"India":{b:"Region: Asia. Languages: Hindi, English, Tamil, Bengali, Telugu. BACI delivers audience, conversion and channel intelligence for India \u2014 in its dominant language, with local resources."},"Indonesia":{b:"Region: Asia. Languages: Indonesian. BACI delivers audience, conversion and channel intelligence for Indonesia \u2014 in its dominant language, with local resources."},"Japan":{b:"Region: Asia. Languages: Japanese. BACI delivers audience, conversion and channel intelligence for Japan \u2014 in its dominant language, with local resources."},"Kazakhstan":{b:"Region: Asia. Languages: Kazakh, Russian. BACI delivers audience, conversion and channel intelligence for Kazakhstan \u2014 in its dominant language, with local resources."},"Kyrgyzstan":{b:"Region: Asia. Languages: Kyrgyz, Russian. BACI delivers audience, conversion and channel intelligence for Kyrgyzstan \u2014 in its dominant language, with local resources."},"Laos":{b:"Region: Asia. Languages: Lao. BACI delivers audience, conversion and channel intelligence for Laos \u2014 in its dominant language, with local resources."},"Malaysia":{b:"Region: Asia. Languages: Malay, English, Mandarin, Tamil. BACI delivers audience, conversion and channel intelligence for Malaysia \u2014 in its dominant language, with local resources."},"Maldives":{b:"Region: Asia. Languages: Dhivehi. BACI delivers audience, conversion and channel intelligence for Maldives \u2014 in its dominant language, with local resources."},"Mongolia":{b:"Region: Asia. Languages: Mongolian. BACI delivers audience, conversion and channel intelligence for Mongolia \u2014 in its dominant language, with local resources."},"Myanmar":{b:"Region: Asia. Languages: Burmese. BACI delivers audience, conversion and channel intelligence for Myanmar \u2014 in its dominant language, with local resources."},"Nepal":{b:"Region: Asia. Languages: Nepali. BACI delivers audience, conversion and channel intelligence for Nepal \u2014 in its dominant language, with local resources."},"North Korea":{b:"Region: Asia. Languages: Korean. BACI delivers audience, conversion and channel intelligence for North Korea \u2014 in its dominant language, with local resources."},"Pakistan":{b:"Region: Asia. Languages: Urdu, English, Punjabi. BACI delivers audience, conversion and channel intelligence for Pakistan \u2014 in its dominant language, with local resources."},"Philippines":{b:"Region: Asia. Languages: Filipino, English. BACI delivers audience, conversion and channel intelligence for Philippines \u2014 in its dominant language, with local resources."},"Singapore":{b:"Region: Asia. Languages: English, Mandarin, Malay, Tamil. BACI delivers audience, conversion and channel intelligence for Singapore \u2014 in its dominant language, with local resources."},"South Korea":{b:"Region: Asia. Languages: Korean. BACI delivers audience, conversion and channel intelligence for South Korea \u2014 in its dominant language, with local resources."},"Sri Lanka":{b:"Region: Asia. Languages: Sinhala, Tamil, English. BACI delivers audience, conversion and channel intelligence for Sri Lanka \u2014 in its dominant language, with local resources."},"Taiwan":{b:"Region: Asia. Languages: Mandarin. BACI delivers audience, conversion and channel intelligence for Taiwan \u2014 in its dominant language, with local resources."},"Tajikistan":{b:"Region: Asia. Languages: Tajik, Russian. BACI delivers audience, conversion and channel intelligence for Tajikistan \u2014 in its dominant language, with local resources."},"Thailand":{b:"Region: Asia. Languages: Thai. BACI delivers audience, conversion and channel intelligence for Thailand \u2014 in its dominant language, with local resources."},"Timor-Leste":{b:"Region: Asia. Languages: Tetum, Portuguese. BACI delivers audience, conversion and channel intelligence for Timor-Leste \u2014 in its dominant language, with local resources."},"Turkmenistan":{b:"Region: Asia. Languages: Turkmen. BACI delivers audience, conversion and channel intelligence for Turkmenistan \u2014 in its dominant language, with local resources."},"Uzbekistan":{b:"Region: Asia. Languages: Uzbek, Russian. BACI delivers audience, conversion and channel intelligence for Uzbekistan \u2014 in its dominant language, with local resources."},"Vietnam":{b:"Region: Asia. Languages: Vietnamese. BACI delivers audience, conversion and channel intelligence for Vietnam \u2014 in its dominant language, with local resources."},"Albania":{b:"Region: Europe. Languages: Albanian. BACI delivers audience, conversion and channel intelligence for Albania \u2014 in its dominant language, with local resources."},"Austria":{b:"Region: Europe. Languages: German. BACI delivers audience, conversion and channel intelligence for Austria \u2014 in its dominant language, with local resources."},"Belarus":{b:"Region: Europe. Languages: Belarusian, Russian. BACI delivers audience, conversion and channel intelligence for Belarus \u2014 in its dominant language, with local resources."},"Belgium":{b:"Region: Europe. Languages: Dutch, French, German. BACI delivers audience, conversion and channel intelligence for Belgium \u2014 in its dominant language, with local resources."},"Bosnia & Herzegovina":{b:"Region: Europe. Languages: Bosnian, Croatian, Serbian. BACI delivers audience, conversion and channel intelligence for Bosnia & Herzegovina \u2014 in its dominant language, with local resources."},"Bulgaria":{b:"Region: Europe. Languages: Bulgarian. BACI delivers audience, conversion and channel intelligence for Bulgaria \u2014 in its dominant language, with local resources."},"Croatia":{b:"Region: Europe. Languages: Croatian. BACI delivers audience, conversion and channel intelligence for Croatia \u2014 in its dominant language, with local resources."},"Czech Republic":{b:"Region: Europe. Languages: Czech. BACI delivers audience, conversion and channel intelligence for Czech Republic \u2014 in its dominant language, with local resources."},"Denmark":{b:"Region: Europe. Languages: Danish. BACI delivers audience, conversion and channel intelligence for Denmark \u2014 in its dominant language, with local resources."},"Estonia":{b:"Region: Europe. Languages: Estonian. BACI delivers audience, conversion and channel intelligence for Estonia \u2014 in its dominant language, with local resources."},"Finland":{b:"Region: Europe. Languages: Finnish, Swedish. BACI delivers audience, conversion and channel intelligence for Finland \u2014 in its dominant language, with local resources."},"France":{b:"Region: Europe. Languages: French. BACI delivers audience, conversion and channel intelligence for France \u2014 in its dominant language, with local resources."},"Germany":{b:"Region: Europe. Languages: German. BACI delivers audience, conversion and channel intelligence for Germany \u2014 in its dominant language, with local resources."},"Greece":{b:"Region: Europe. Languages: Greek. BACI delivers audience, conversion and channel intelligence for Greece \u2014 in its dominant language, with local resources."},"Hungary":{b:"Region: Europe. Languages: Hungarian. BACI delivers audience, conversion and channel intelligence for Hungary \u2014 in its dominant language, with local resources."},"Iceland":{b:"Region: Europe. Languages: Icelandic. BACI delivers audience, conversion and channel intelligence for Iceland \u2014 in its dominant language, with local resources."},"Ireland":{b:"Region: Europe. Languages: Irish, English. BACI delivers audience, conversion and channel intelligence for Ireland \u2014 in its dominant language, with local resources."},"Italy":{b:"Region: Europe. Languages: Italian. BACI delivers audience, conversion and channel intelligence for Italy \u2014 in its dominant language, with local resources."},"Kosovo":{b:"Region: Europe. Languages: Albanian, Serbian. BACI delivers audience, conversion and channel intelligence for Kosovo \u2014 in its dominant language, with local resources."},"Latvia":{b:"Region: Europe. Languages: Latvian. BACI delivers audience, conversion and channel intelligence for Latvia \u2014 in its dominant language, with local resources."},"Lithuania":{b:"Region: Europe. Languages: Lithuanian. BACI delivers audience, conversion and channel intelligence for Lithuania \u2014 in its dominant language, with local resources."},"Luxembourg":{b:"Region: Europe. Languages: Luxembourgish, French, German. BACI delivers audience, conversion and channel intelligence for Luxembourg \u2014 in its dominant language, with local resources."},"Malta":{b:"Region: Europe. Languages: Maltese, English. BACI delivers audience, conversion and channel intelligence for Malta \u2014 in its dominant language, with local resources."},"Moldova":{b:"Region: Europe. Languages: Romanian. BACI delivers audience, conversion and channel intelligence for Moldova \u2014 in its dominant language, with local resources."},"Montenegro":{b:"Region: Europe. Languages: Montenegrin. BACI delivers audience, conversion and channel intelligence for Montenegro \u2014 in its dominant language, with local resources."},"Netherlands":{b:"Region: Europe. Languages: Dutch. BACI delivers audience, conversion and channel intelligence for Netherlands \u2014 in its dominant language, with local resources."},"North Macedonia":{b:"Region: Europe. Languages: Macedonian, Albanian. BACI delivers audience, conversion and channel intelligence for North Macedonia \u2014 in its dominant language, with local resources."},"Norway":{b:"Region: Europe. Languages: Norwegian. BACI delivers audience, conversion and channel intelligence for Norway \u2014 in its dominant language, with local resources."},"Poland":{b:"Region: Europe. Languages: Polish. BACI delivers audience, conversion and channel intelligence for Poland \u2014 in its dominant language, with local resources."},"Portugal":{b:"Region: Europe. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for Portugal \u2014 in its dominant language, with local resources."},"Romania":{b:"Region: Europe. Languages: Romanian. BACI delivers audience, conversion and channel intelligence for Romania \u2014 in its dominant language, with local resources."},"Russia":{b:"Region: Europe. Languages: Russian. BACI delivers audience, conversion and channel intelligence for Russia \u2014 in its dominant language, with local resources."},"Serbia":{b:"Region: Europe. Languages: Serbian. BACI delivers audience, conversion and channel intelligence for Serbia \u2014 in its dominant language, with local resources."},"Slovakia":{b:"Region: Europe. Languages: Slovak. BACI delivers audience, conversion and channel intelligence for Slovakia \u2014 in its dominant language, with local resources."},"Slovenia":{b:"Region: Europe. Languages: Slovenian. BACI delivers audience, conversion and channel intelligence for Slovenia \u2014 in its dominant language, with local resources."},"Spain":{b:"Region: Europe. Languages: Spanish, Catalan, Galician, Basque. BACI delivers audience, conversion and channel intelligence for Spain \u2014 in its dominant language, with local resources."},"Sweden":{b:"Region: Europe. Languages: Swedish. BACI delivers audience, conversion and channel intelligence for Sweden \u2014 in its dominant language, with local resources."},"Switzerland":{b:"Region: Europe. Languages: German, French, Italian, Romansh. BACI delivers audience, conversion and channel intelligence for Switzerland \u2014 in its dominant language, with local resources."},"Ukraine":{b:"Region: Europe. Languages: Ukrainian. BACI delivers audience, conversion and channel intelligence for Ukraine \u2014 in its dominant language, with local resources."},"United Kingdom":{b:"Region: Europe. Languages: English, Welsh, Scottish Gaelic. BACI delivers audience, conversion and channel intelligence for United Kingdom \u2014 in its dominant language, with local resources."},"Bahrain":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Bahrain \u2014 in its dominant language, with local resources."},"Iran":{b:"Region: MENA. Languages: Persian (Farsi). BACI delivers audience, conversion and channel intelligence for Iran \u2014 in its dominant language, with local resources."},"Iraq":{b:"Region: MENA. Languages: Arabic, Kurdish. BACI delivers audience, conversion and channel intelligence for Iraq \u2014 in its dominant language, with local resources."},"Israel":{b:"Region: MENA. Languages: Hebrew, Arabic. BACI delivers audience, conversion and channel intelligence for Israel \u2014 in its dominant language, with local resources."},"Jordan":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Jordan \u2014 in its dominant language, with local resources."},"Kuwait":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Kuwait \u2014 in its dominant language, with local resources."},"Lebanon":{b:"Region: MENA. Languages: Arabic, French. BACI delivers audience, conversion and channel intelligence for Lebanon \u2014 in its dominant language, with local resources."},"Oman":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Oman \u2014 in its dominant language, with local resources."},"Palestine":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Palestine \u2014 in its dominant language, with local resources."},"Qatar":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Qatar \u2014 in its dominant language, with local resources."},"Saudi Arabia":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Saudi Arabia \u2014 in its dominant language, with local resources."},"Syria":{b:"Region: MENA. Languages: Arabic, Kurdish. BACI delivers audience, conversion and channel intelligence for Syria \u2014 in its dominant language, with local resources."},"Turkey":{b:"Region: MENA. Languages: Turkish. BACI delivers audience, conversion and channel intelligence for Turkey \u2014 in its dominant language, with local resources."},"UAE":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for UAE \u2014 in its dominant language, with local resources."},"Yemen":{b:"Region: MENA. Languages: Arabic. BACI delivers audience, conversion and channel intelligence for Yemen \u2014 in its dominant language, with local resources."},"Canada":{b:"Region: North America. Languages: English, French. BACI delivers audience, conversion and channel intelligence for Canada \u2014 in its dominant language, with local resources."},"Mexico":{b:"Region: North America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Mexico \u2014 in its dominant language, with local resources."},"United States":{b:"Region: North America. Languages: English, Spanish. BACI delivers audience, conversion and channel intelligence for United States \u2014 in its dominant language, with local resources."},"Argentina":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Argentina \u2014 in its dominant language, with local resources."},"Bolivia":{b:"Region: Latin America. Languages: Spanish, Quechua, Aymara. BACI delivers audience, conversion and channel intelligence for Bolivia \u2014 in its dominant language, with local resources."},"Brazil":{b:"Region: Latin America. Languages: Portuguese. BACI delivers audience, conversion and channel intelligence for Brazil \u2014 in its dominant language, with local resources."},"Chile":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Chile \u2014 in its dominant language, with local resources."},"Colombia":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Colombia \u2014 in its dominant language, with local resources."},"Costa Rica":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Costa Rica \u2014 in its dominant language, with local resources."},"Cuba":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Cuba \u2014 in its dominant language, with local resources."},"Dominican Republic":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Dominican Republic \u2014 in its dominant language, with local resources."},"Ecuador":{b:"Region: Latin America. Languages: Spanish, Quechua. BACI delivers audience, conversion and channel intelligence for Ecuador \u2014 in its dominant language, with local resources."},"El Salvador":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for El Salvador \u2014 in its dominant language, with local resources."},"Guatemala":{b:"Region: Latin America. Languages: Spanish, Mayan languages. BACI delivers audience, conversion and channel intelligence for Guatemala \u2014 in its dominant language, with local resources."},"Haiti":{b:"Region: Latin America. Languages: Haitian Creole, French. BACI delivers audience, conversion and channel intelligence for Haiti \u2014 in its dominant language, with local resources."},"Honduras":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Honduras \u2014 in its dominant language, with local resources."},"Nicaragua":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Nicaragua \u2014 in its dominant language, with local resources."},"Panama":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Panama \u2014 in its dominant language, with local resources."},"Paraguay":{b:"Region: Latin America. Languages: Spanish, Guaran\u00ed. BACI delivers audience, conversion and channel intelligence for Paraguay \u2014 in its dominant language, with local resources."},"Peru":{b:"Region: Latin America. Languages: Spanish, Quechua, Aymara. BACI delivers audience, conversion and channel intelligence for Peru \u2014 in its dominant language, with local resources."},"Uruguay":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Uruguay \u2014 in its dominant language, with local resources."},"Venezuela":{b:"Region: Latin America. Languages: Spanish. BACI delivers audience, conversion and channel intelligence for Venezuela \u2014 in its dominant language, with local resources."},"Bahamas":{b:"Region: Caribbean. Languages: English. BACI delivers audience, conversion and channel intelligence for Bahamas \u2014 in its dominant language, with local resources."},"Barbados":{b:"Region: Caribbean. Languages: English. BACI delivers audience, conversion and channel intelligence for Barbados \u2014 in its dominant language, with local resources."},"Guyana":{b:"Region: Caribbean. Languages: English. BACI delivers audience, conversion and channel intelligence for Guyana \u2014 in its dominant language, with local resources."},"Jamaica":{b:"Region: Caribbean. Languages: English, Jamaican Patois. BACI delivers audience, conversion and channel intelligence for Jamaica \u2014 in its dominant language, with local resources."},"Puerto Rico":{b:"Region: Caribbean. Languages: Spanish, English. BACI delivers audience, conversion and channel intelligence for Puerto Rico \u2014 in its dominant language, with local resources."},"Suriname":{b:"Region: Caribbean. Languages: Dutch, Sranan Tongo. BACI delivers audience, conversion and channel intelligence for Suriname \u2014 in its dominant language, with local resources."},"Trinidad & Tobago":{b:"Region: Caribbean. Languages: English. BACI delivers audience, conversion and channel intelligence for Trinidad & Tobago \u2014 in its dominant language, with local resources."},"Australia":{b:"Region: Oceania. Languages: English. BACI delivers audience, conversion and channel intelligence for Australia \u2014 in its dominant language, with local resources."},"Fiji":{b:"Region: Oceania. Languages: English, Fijian, Hindi. BACI delivers audience, conversion and channel intelligence for Fiji \u2014 in its dominant language, with local resources."},"New Zealand":{b:"Region: Oceania. Languages: English, Maori. BACI delivers audience, conversion and channel intelligence for New Zealand \u2014 in its dominant language, with local resources."},"Papua New Guinea":{b:"Region: Oceania. Languages: English, Tok Pisin, Hiri Motu. BACI delivers audience, conversion and channel intelligence for Papua New Guinea \u2014 in its dominant language, with local resources."},"Samoa":{b:"Region: Oceania. Languages: Samoan, English. BACI delivers audience, conversion and channel intelligence for Samoa \u2014 in its dominant language, with local resources."}};
+    var LANGUAGES={"Afrikaans":{b:"Spoken across BACI's coverage in 2 markets: Namibia, South Africa. BACI operates in it natively \u2014 reaching people in the words they think in."},"Albanian":{b:"Spoken across BACI's coverage in 3 markets: Albania, Kosovo, North Macedonia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Amharic":{b:"Spoken across BACI's coverage in 1 market: Ethiopia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Arabic":{b:"Spoken across BACI's coverage in 26 markets: Algeria, Bahrain, Chad, Comoros and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Armenian":{b:"Spoken across BACI's coverage in 1 market: Armenia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Aymara":{b:"Spoken across BACI's coverage in 2 markets: Bolivia, Peru. BACI operates in it natively \u2014 reaching people in the words they think in."},"Azerbaijani":{b:"Spoken across BACI's coverage in 1 market: Azerbaijan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Bambara":{b:"Spoken across BACI's coverage in 1 market: Mali. BACI operates in it natively \u2014 reaching people in the words they think in."},"Basque":{b:"Spoken across BACI's coverage in 1 market: Spain. BACI operates in it natively \u2014 reaching people in the words they think in."},"Belarusian":{b:"Spoken across BACI's coverage in 1 market: Belarus. BACI operates in it natively \u2014 reaching people in the words they think in."},"Bengali":{b:"Spoken across BACI's coverage in 2 markets: Bangladesh, India. BACI operates in it natively \u2014 reaching people in the words they think in."},"Bosnian":{b:"Spoken across BACI's coverage in 1 market: Bosnia & Herzegovina. BACI operates in it natively \u2014 reaching people in the words they think in."},"Bulgarian":{b:"Spoken across BACI's coverage in 1 market: Bulgaria. BACI operates in it natively \u2014 reaching people in the words they think in."},"Burmese":{b:"Spoken across BACI's coverage in 1 market: Myanmar. BACI operates in it natively \u2014 reaching people in the words they think in."},"Cape Verdean Creole":{b:"Spoken across BACI's coverage in 1 market: Cabo Verde. BACI operates in it natively \u2014 reaching people in the words they think in."},"Catalan":{b:"Spoken across BACI's coverage in 1 market: Spain. BACI operates in it natively \u2014 reaching people in the words they think in."},"Chichewa":{b:"Spoken across BACI's coverage in 1 market: Malawi. BACI operates in it natively \u2014 reaching people in the words they think in."},"Comorian":{b:"Spoken across BACI's coverage in 1 market: Comoros. BACI operates in it natively \u2014 reaching people in the words they think in."},"Creole":{b:"Spoken across BACI's coverage in 1 market: Mauritius. BACI operates in it natively \u2014 reaching people in the words they think in."},"Croatian":{b:"Spoken across BACI's coverage in 2 markets: Bosnia & Herzegovina, Croatia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Czech":{b:"Spoken across BACI's coverage in 1 market: Czech Republic. BACI operates in it natively \u2014 reaching people in the words they think in."},"Danish":{b:"Spoken across BACI's coverage in 1 market: Denmark. BACI operates in it natively \u2014 reaching people in the words they think in."},"Dari":{b:"Spoken across BACI's coverage in 1 market: Afghanistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Dhivehi":{b:"Spoken across BACI's coverage in 1 market: Maldives. BACI operates in it natively \u2014 reaching people in the words they think in."},"Dutch":{b:"Spoken across BACI's coverage in 3 markets: Belgium, Netherlands, Suriname. BACI operates in it natively \u2014 reaching people in the words they think in."},"Dzongkha":{b:"Spoken across BACI's coverage in 1 market: Bhutan. BACI operates in it natively \u2014 reaching people in the words they think in."},"English":{b:"Spoken across BACI's coverage in 45 markets: Australia, Bahamas, Barbados, Botswana and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Estonian":{b:"Spoken across BACI's coverage in 1 market: Estonia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Ewe":{b:"Spoken across BACI's coverage in 1 market: Togo. BACI operates in it natively \u2014 reaching people in the words they think in."},"Fijian":{b:"Spoken across BACI's coverage in 1 market: Fiji. BACI operates in it natively \u2014 reaching people in the words they think in."},"Filipino":{b:"Spoken across BACI's coverage in 1 market: Philippines. BACI operates in it natively \u2014 reaching people in the words they think in."},"Finnish":{b:"Spoken across BACI's coverage in 1 market: Finland. BACI operates in it natively \u2014 reaching people in the words they think in."},"French":{b:"Spoken across BACI's coverage in 32 markets: Algeria, Belgium, Benin, Burkina Faso and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Galician":{b:"Spoken across BACI's coverage in 1 market: Spain. BACI operates in it natively \u2014 reaching people in the words they think in."},"Georgian":{b:"Spoken across BACI's coverage in 1 market: Georgia. BACI operates in it natively \u2014 reaching people in the words they think in."},"German":{b:"Spoken across BACI's coverage in 5 markets: Austria, Belgium, Germany, Luxembourg and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Greek":{b:"Spoken across BACI's coverage in 2 markets: Cyprus, Greece. BACI operates in it natively \u2014 reaching people in the words they think in."},"Guaran\u00ed":{b:"Spoken across BACI's coverage in 1 market: Paraguay. BACI operates in it natively \u2014 reaching people in the words they think in."},"Haitian Creole":{b:"Spoken across BACI's coverage in 1 market: Haiti. BACI operates in it natively \u2014 reaching people in the words they think in."},"Hausa":{b:"Spoken across BACI's coverage in 2 markets: Niger, Nigeria. BACI operates in it natively \u2014 reaching people in the words they think in."},"Hebrew":{b:"Spoken across BACI's coverage in 1 market: Israel. BACI operates in it natively \u2014 reaching people in the words they think in."},"Hindi":{b:"Spoken across BACI's coverage in 2 markets: Fiji, India. BACI operates in it natively \u2014 reaching people in the words they think in."},"Hiri Motu":{b:"Spoken across BACI's coverage in 1 market: Papua New Guinea. BACI operates in it natively \u2014 reaching people in the words they think in."},"Hungarian":{b:"Spoken across BACI's coverage in 1 market: Hungary. BACI operates in it natively \u2014 reaching people in the words they think in."},"Icelandic":{b:"Spoken across BACI's coverage in 1 market: Iceland. BACI operates in it natively \u2014 reaching people in the words they think in."},"Igbo":{b:"Spoken across BACI's coverage in 1 market: Nigeria. BACI operates in it natively \u2014 reaching people in the words they think in."},"Indonesian":{b:"Spoken across BACI's coverage in 1 market: Indonesia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Irish":{b:"Spoken across BACI's coverage in 1 market: Ireland. BACI operates in it natively \u2014 reaching people in the words they think in."},"Italian":{b:"Spoken across BACI's coverage in 2 markets: Italy, Switzerland. BACI operates in it natively \u2014 reaching people in the words they think in."},"Jamaican Patois":{b:"Spoken across BACI's coverage in 1 market: Jamaica. BACI operates in it natively \u2014 reaching people in the words they think in."},"Japanese":{b:"Spoken across BACI's coverage in 1 market: Japan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Kazakh":{b:"Spoken across BACI's coverage in 1 market: Kazakhstan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Khmer":{b:"Spoken across BACI's coverage in 1 market: Cambodia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Kinyarwanda":{b:"Spoken across BACI's coverage in 1 market: Rwanda. BACI operates in it natively \u2014 reaching people in the words they think in."},"Kirundi":{b:"Spoken across BACI's coverage in 1 market: Burundi. BACI operates in it natively \u2014 reaching people in the words they think in."},"Korean":{b:"Spoken across BACI's coverage in 2 markets: North Korea, South Korea. BACI operates in it natively \u2014 reaching people in the words they think in."},"Krio":{b:"Spoken across BACI's coverage in 1 market: Sierra Leone. BACI operates in it natively \u2014 reaching people in the words they think in."},"Kurdish":{b:"Spoken across BACI's coverage in 2 markets: Iraq, Syria. BACI operates in it natively \u2014 reaching people in the words they think in."},"Kyrgyz":{b:"Spoken across BACI's coverage in 1 market: Kyrgyzstan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Lao":{b:"Spoken across BACI's coverage in 1 market: Laos. BACI operates in it natively \u2014 reaching people in the words they think in."},"Latvian":{b:"Spoken across BACI's coverage in 1 market: Latvia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Lingala":{b:"Spoken across BACI's coverage in 2 markets: Congo, DR Congo. BACI operates in it natively \u2014 reaching people in the words they think in."},"Lithuanian":{b:"Spoken across BACI's coverage in 1 market: Lithuania. BACI operates in it natively \u2014 reaching people in the words they think in."},"Luganda":{b:"Spoken across BACI's coverage in 1 market: Uganda. BACI operates in it natively \u2014 reaching people in the words they think in."},"Luxembourgish":{b:"Spoken across BACI's coverage in 1 market: Luxembourg. BACI operates in it natively \u2014 reaching people in the words they think in."},"Macedonian":{b:"Spoken across BACI's coverage in 1 market: North Macedonia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Malagasy":{b:"Spoken across BACI's coverage in 1 market: Madagascar. BACI operates in it natively \u2014 reaching people in the words they think in."},"Malay":{b:"Spoken across BACI's coverage in 3 markets: Brunei, Malaysia, Singapore. BACI operates in it natively \u2014 reaching people in the words they think in."},"Maltese":{b:"Spoken across BACI's coverage in 1 market: Malta. BACI operates in it natively \u2014 reaching people in the words they think in."},"Mandarin":{b:"Spoken across BACI's coverage in 4 markets: China, Malaysia, Singapore, Taiwan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Maori":{b:"Spoken across BACI's coverage in 1 market: New Zealand. BACI operates in it natively \u2014 reaching people in the words they think in."},"Mayan languages":{b:"Spoken across BACI's coverage in 1 market: Guatemala. BACI operates in it natively \u2014 reaching people in the words they think in."},"Mongolian":{b:"Spoken across BACI's coverage in 1 market: Mongolia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Montenegrin":{b:"Spoken across BACI's coverage in 1 market: Montenegro. BACI operates in it natively \u2014 reaching people in the words they think in."},"Moor\u00e9":{b:"Spoken across BACI's coverage in 1 market: Burkina Faso. BACI operates in it natively \u2014 reaching people in the words they think in."},"Ndebele":{b:"Spoken across BACI's coverage in 1 market: Zimbabwe. BACI operates in it natively \u2014 reaching people in the words they think in."},"Nepali":{b:"Spoken across BACI's coverage in 1 market: Nepal. BACI operates in it natively \u2014 reaching people in the words they think in."},"Norwegian":{b:"Spoken across BACI's coverage in 1 market: Norway. BACI operates in it natively \u2014 reaching people in the words they think in."},"Nyanja":{b:"Spoken across BACI's coverage in 1 market: Zambia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Oromo":{b:"Spoken across BACI's coverage in 1 market: Ethiopia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Pashto":{b:"Spoken across BACI's coverage in 1 market: Afghanistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Persian (Farsi)":{b:"Spoken across BACI's coverage in 1 market: Iran. BACI operates in it natively \u2014 reaching people in the words they think in."},"Polish":{b:"Spoken across BACI's coverage in 1 market: Poland. BACI operates in it natively \u2014 reaching people in the words they think in."},"Portuguese":{b:"Spoken across BACI's coverage in 9 markets: Angola, Brazil, Cabo Verde, Equatorial Guinea and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Punjabi":{b:"Spoken across BACI's coverage in 1 market: Pakistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Quechua":{b:"Spoken across BACI's coverage in 3 markets: Bolivia, Ecuador, Peru. BACI operates in it natively \u2014 reaching people in the words they think in."},"Romanian":{b:"Spoken across BACI's coverage in 2 markets: Moldova, Romania. BACI operates in it natively \u2014 reaching people in the words they think in."},"Romansh":{b:"Spoken across BACI's coverage in 1 market: Switzerland. BACI operates in it natively \u2014 reaching people in the words they think in."},"Russian":{b:"Spoken across BACI's coverage in 6 markets: Belarus, Kazakhstan, Kyrgyzstan, Russia and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Samoan":{b:"Spoken across BACI's coverage in 1 market: Samoa. BACI operates in it natively \u2014 reaching people in the words they think in."},"Sango":{b:"Spoken across BACI's coverage in 1 market: Central African Republic. BACI operates in it natively \u2014 reaching people in the words they think in."},"Scottish Gaelic":{b:"Spoken across BACI's coverage in 1 market: United Kingdom. BACI operates in it natively \u2014 reaching people in the words they think in."},"Serbian":{b:"Spoken across BACI's coverage in 3 markets: Bosnia & Herzegovina, Kosovo, Serbia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Sesotho":{b:"Spoken across BACI's coverage in 1 market: Lesotho. BACI operates in it natively \u2014 reaching people in the words they think in."},"Shona":{b:"Spoken across BACI's coverage in 1 market: Zimbabwe. BACI operates in it natively \u2014 reaching people in the words they think in."},"Sinhala":{b:"Spoken across BACI's coverage in 1 market: Sri Lanka. BACI operates in it natively \u2014 reaching people in the words they think in."},"Slovak":{b:"Spoken across BACI's coverage in 1 market: Slovakia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Slovenian":{b:"Spoken across BACI's coverage in 1 market: Slovenia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Somali":{b:"Spoken across BACI's coverage in 3 markets: Djibouti, Ethiopia, Somalia. BACI operates in it natively \u2014 reaching people in the words they think in."},"Spanish":{b:"Spoken across BACI's coverage in 22 markets: Argentina, Bolivia, Chile, Colombia and more. BACI operates in it natively \u2014 reaching people in the words they think in."},"Sranan Tongo":{b:"Spoken across BACI's coverage in 1 market: Suriname. BACI operates in it natively \u2014 reaching people in the words they think in."},"Swahili":{b:"Spoken across BACI's coverage in 4 markets: DR Congo, Kenya, Tanzania, Uganda. BACI operates in it natively \u2014 reaching people in the words they think in."},"Swati":{b:"Spoken across BACI's coverage in 1 market: Eswatini. BACI operates in it natively \u2014 reaching people in the words they think in."},"Swedish":{b:"Spoken across BACI's coverage in 2 markets: Finland, Sweden. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tajik":{b:"Spoken across BACI's coverage in 1 market: Tajikistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tamazight":{b:"Spoken across BACI's coverage in 2 markets: Algeria, Morocco. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tamil":{b:"Spoken across BACI's coverage in 4 markets: India, Malaysia, Singapore, Sri Lanka. BACI operates in it natively \u2014 reaching people in the words they think in."},"Telugu":{b:"Spoken across BACI's coverage in 1 market: India. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tetum":{b:"Spoken across BACI's coverage in 1 market: Timor-Leste. BACI operates in it natively \u2014 reaching people in the words they think in."},"Thai":{b:"Spoken across BACI's coverage in 1 market: Thailand. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tigrinya":{b:"Spoken across BACI's coverage in 1 market: Eritrea. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tok Pisin":{b:"Spoken across BACI's coverage in 1 market: Papua New Guinea. BACI operates in it natively \u2014 reaching people in the words they think in."},"Tswana":{b:"Spoken across BACI's coverage in 1 market: Botswana. BACI operates in it natively \u2014 reaching people in the words they think in."},"Turkish":{b:"Spoken across BACI's coverage in 2 markets: Cyprus, Turkey. BACI operates in it natively \u2014 reaching people in the words they think in."},"Turkmen":{b:"Spoken across BACI's coverage in 1 market: Turkmenistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Ukrainian":{b:"Spoken across BACI's coverage in 1 market: Ukraine. BACI operates in it natively \u2014 reaching people in the words they think in."},"Urdu":{b:"Spoken across BACI's coverage in 1 market: Pakistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Uzbek":{b:"Spoken across BACI's coverage in 1 market: Uzbekistan. BACI operates in it natively \u2014 reaching people in the words they think in."},"Vietnamese":{b:"Spoken across BACI's coverage in 1 market: Vietnam. BACI operates in it natively \u2014 reaching people in the words they think in."},"Welsh":{b:"Spoken across BACI's coverage in 1 market: United Kingdom. BACI operates in it natively \u2014 reaching people in the words they think in."},"Wolof":{b:"Spoken across BACI's coverage in 1 market: Senegal. BACI operates in it natively \u2014 reaching people in the words they think in."},"Xhosa":{b:"Spoken across BACI's coverage in 1 market: South Africa. BACI operates in it natively \u2014 reaching people in the words they think in."},"Yoruba":{b:"Spoken across BACI's coverage in 1 market: Nigeria. BACI operates in it natively \u2014 reaching people in the words they think in."},"Zulu":{b:"Spoken across BACI's coverage in 1 market: South Africa. BACI operates in it natively \u2014 reaching people in the words they think in."}};
+    (function(){
+      var REGIONS=["Africa","Asia","Europe","MENA","Europe / MENA","North America","Latin America","Caribbean","Oceania"];
+      var rt=document.getElementById('regionTrack');
+      if(rt){var rh='';for(var r=0;r<2;r++)REGIONS.forEach(function(n){rh+='<a>'+n+'</a>'});rt.innerHTML=rh;rt.style.animationDuration=(REGIONS.length*3.2)+'s';}
+      function credits(id,data,panelId,titleId,bodyId){
+        var box=document.getElementById(id); if(!box)return;
+        var names=Object.keys(data),html='';
+        for(var r=0;r<2;r++)names.forEach(function(n){html+='<a data-k="'+n+'">'+n+'</a>'});
+        box.innerHTML=html; box.style.animationDuration=(names.length*0.55)+'s';
+        var p=document.getElementById(panelId),T=document.getElementById(titleId),B=document.getElementById(bodyId);
+        box.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;
+          var d=data[a.getAttribute('data-k')];if(!d)return;T.textContent=a.getAttribute('data-k');B.textContent=d.b;
+          p.style.display='block';p.scrollIntoView({behavior:'smooth',block:'nearest'});});
+      }
+      credits('countryCredits',COUNTRIES,'cPanel','cTitle','cBody');
+      credits('langCredits',LANGUAGES,'lPanel','lTitle','lBody');
+    })();
+
+    var DAT={
+      doc:{Acquire:{t:"Acquire",b:"Find your next customer before your competitor does. BACI identifies the audiences, creators and affiliate networks with the highest probability of conversion, before they enter anyone else's pipeline. Precision, at scale."},
+        Convert:{t:"Convert",b:"Attention is cheap; conversion is everything. BACI takes every acquisition signal and deploys it across content, campaigns and distribution designed to move people from aware to committed."},
+        Grow:{t:"Grow",b:"Growth that compounds, not growth that stops. Every result feeds directly back into the next acquisition cycle: better targeting, sharper conversion, higher retention."}},
+      ind:{"Retail":{t:"Retail",b:"In retail, advantage is measured in hours. BACI tracks demand, audience shifts and channel performance in real time, so you stock, price and market to what's about to happen \u2014 not what already did."},"Professional services":{t:"Professional services",b:"Reputation wins the meeting; intelligence wins the market. BACI identifies the clients most likely to convert, sharpens your positioning, and turns expertise into a predictable pipeline."},"Human resources":{t:"Human resources",b:"Talent is a market, and markets move. BACI reads where the right people are, what moves them, and how your employer brand is truly perceived \u2014 so you attract and keep the people who define your growth."},"Healthcare":{t:"Healthcare",b:"Trust is everything and precision is non-negotiable. BACI surfaces demand, audience and channel intelligence with the discretion healthcare requires, so you reach the right people with the right message, responsibly."},"Tendering and bidding":{t:"Tendering and bidding",b:"Most opportunities are lost before they're seen. BACI discovers the right tenders early, reads the signals behind each one, and helps you bid where you're most likely to win."},"Real estate":{t:"Real estate",b:"Property moves on timing and intent. BACI detects market movement, buyer and investor intent, and the channels that convert \u2014 so you list, position and close ahead of the curve."},"Procurement":{t:"Procurement",b:"Every decision is a lever on margin. BACI brings supplier, sourcing and spend intelligence into one view, so you buy smarter, reduce risk, and turn procurement into a growth advantage."}},
+      city:{"New York":{t:"North America",b:"From New York across North America, BACI operates where the world's most competitive markets are set \u2014 deep audience, capital and channel intelligence, tuned to local behaviour."},
+        "London":{t:"Europe",b:"From London across Europe, BACI navigates one of the world's most diverse and regulated markets \u2014 precise, multilingual intelligence that respects local nuance while connecting the whole region."},
+        "Dubai":{t:"MENA",b:"From Dubai across the Middle East and North Africa, BACI reads one of the fastest-growing arenas on earth \u2014 intelligence attuned to local culture, language and ambition."},
+        "Nairobi":{t:"Africa",b:"From Nairobi across Africa, BACI works at the frontier of the world's youngest, fastest-rising markets \u2014 local-first intelligence that meets each market in its own language and context."},
+        "Singapore":{t:"Asia-Pacific",b:"From Singapore across Asia-Pacific, BACI operates at the centre of global commerce and innovation \u2014 intelligence that spans dozens of markets and languages without losing local precision."},
+        "Hong Kong":{t:"East Asia",b:"From Hong Kong across East Asia, BACI connects capital, commerce and culture at one of the world's great crossroads \u2014 regional reach with the local fluency that turns presence into performance."}},
+      mode:{Manual:{t:"Manual",b:"You stay in full control. BACI surfaces the intelligence and recommendations; every decision and action is yours to approve and execute."},
+        Hybrid:{t:"Hybrid",b:"You and the engine work together. BACI proposes and prepares, you approve. The fastest balance of control and speed."},
+        Autonomous:{t:"Autonomous",b:"The engine runs. BACI analyses, decides and executes within the guardrails you set, continuously. You set the strategy; it never stops working."}},
+      cl:{"Content":{t:"Content",b:"Every piece of content is both a signal and an asset. BACI knows what to say, where to say it, and when it will land \u2014 then learns from every response to make the next message sharper."},"Experience":{t:"Experience",b:"Experience is where attention becomes trust. BACI reads how people move, hesitate and decide across every touchpoint, then removes the friction between interest and action."},"Commerce":{t:"Commerce",b:"Commerce is the moment intent becomes revenue. BACI connects behaviour, pricing and timing so the right offer reaches the right buyer at the point of highest intent."},"Strategy":{t:"Strategy",b:"Strategy is the pattern beneath the noise. BACI turns millions of signals into a clear, continuously updating view of where to focus, where to invest, and where to grow next."}}
+    };
+    function bindGrp(grp){var p=document.getElementById(grp+'Panel'),T=document.getElementById(grp+'T'),B=document.getElementById(grp+'B');if(!p)return;
+      document.querySelectorAll('[data-grp="'+grp+'"]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();
+        var d=DAT[grp][el.getAttribute('data-k')];if(!d)return;T.textContent=d.t;B.textContent=d.b;p.style.display='block';p.classList.add('show');
+        p.scrollIntoView({behavior:'smooth',block:'nearest'});});});}
+    ['doc','ind','city','mode','cl'].forEach(bindGrp);
+    document.querySelectorAll('.sub, .writeup p, .writeup h2, .exec p, .ccard h3').forEach(function(el){
+      el.innerHTML=el.innerHTML.replace(/\bBACI\b/g,'<a class="baci" href="#exec">BACI</a>');});
   </script>
 </body>
 </html>
